@@ -11,24 +11,42 @@
         <h1>Técnico</h1>
         <nav>
             <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="cliente.html">Cliente</a></li>
+                <li><a class="button" href="index.html">Inicio</a></li>
+                <li><a class="button" href="cliente.html">Cliente</a></li>
             </ul>
         </nav>
     </header>
     <main>
         <h2>Login</h2>
-        <form>
+        <form onsubmit="return validateLogin()">
             <label for="password">Contraseña:</label>
             <input type="password" id="password" placeholder="Ingresa tu contraseña" required>
             <button type="submit">Ingresar</button>
         </form>
 
-        <h2>Panel de Control</h2>
-        <p>Aquí podrás registrar y actualizar el estado de los equipos.</p>
+        <h2>Cargar Equipo</h2>
+        <form>
+            <label for="equipo">Nombre del Equipo:</label>
+            <input type="text" id="equipo" placeholder="Ingresa el nombre del equipo" required>
+            <button type="submit">Registrar</button>
+        </form>
+
+        <h2>Bandeja de Entrada</h2>
+        <p>Aquí se mostrarán los mensajes de los clientes.</p>
     </main>
     <footer>
         <p>&copy; 2024 Gestión de Equipos</p>
     </footer>
+
+    <script>
+        function validateLogin() {
+            const password = document.getElementById("password").value;
+            if (password !== "1247") {
+                alert("Contraseña incorrecta");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>
