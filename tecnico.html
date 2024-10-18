@@ -72,18 +72,20 @@
             <h2>Bandeja de Entrada</h2>
             <div id="bandeja-entrada">
                 <h3>Mensajes de Contacto</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Asunto</th>
-                            <th>Emisor</th>
-                            <th>Mensaje</th>
-                            <th>Código Identificación</th>
-                        </tr>
-                    </thead>
-                    <tbody id="mensajes"></tbody>
-                </table>
+                <div class="inbox">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Asunto</th>
+                                <th>Emisor</th>
+                                <th>Mensaje</th>
+                                <th>Código Identificación</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mensajes"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
@@ -97,7 +99,6 @@
             if (password === "1247") {
                 document.getElementById("login-section").style.display = "none";
                 document.getElementById("main-section").style.display = "block";
-                // Generar código de identificación aleatorio
                 document.getElementById("codigo").value = Math.floor(10000 + Math.random() * 90000);
                 return false; // Evita el envío del formulario
             } else {
@@ -134,5 +135,29 @@
             return false; // Evita el envío del formulario
         }
     </script>
+
+    <style>
+        .inbox {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
 </body>
 </html>
