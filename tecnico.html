@@ -87,6 +87,22 @@
                     </table>
                 </div>
             </div>
+
+            <h2>Base de Datos de Equipos</h2>
+            <div id="base-datos">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre y Apellido</th>
+                            <th>Modelo</th>
+                            <th>Marca</th>
+                            <th>Código</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="base-datos-equipos"></tbody>
+                </table>
+            </div>
         </div>
     </main>
     <footer>
@@ -100,9 +116,10 @@
                 document.getElementById("login-section").style.display = "none";
                 document.getElementById("main-section").style.display = "block";
                 document.getElementById("codigo").value = Math.floor(10000 + Math.random() * 90000);
+                loadMessages();
                 return false; // Evita el envío del formulario
             } else {
-                alert("Código incorrecto. Intenta de nuevo.");
+                alert("Código incorrecto.");
                 return false; // Evita el envío del formulario
             }
         }
@@ -120,44 +137,45 @@
             const comentarios = document.getElementById("comentarios").value;
             const estado = document.getElementById("estado").value;
 
-            const tbody = document.getElementById("mensajes");
-            const newRow = tbody.insertRow();
-            newRow.insertCell(0).innerText = new Date().toLocaleDateString();
-            newRow.insertCell(1).innerText = "Nuevo Registro"; // Asunto por defecto
-            newRow.insertCell(2).innerText = nombreCliente; // Emisor
-            newRow.insertCell(3).innerText = `Modelo: ${modelo}, Marca: ${marca}, Diagnóstico: ${diagnostico}`;
-            newRow.insertCell(4).innerText = codigo;
+            // Simular el registro del equipo en una base de datos
+            const equipoData = {
+                nombreCliente: nombreCliente,
+                modelo: modelo,
+                marca: marca,
+                codigo: codigo,
+                estado: estado,
+            };
+            const row = `<tr>
+                <td>${nombreCliente}</td>
+                <td>${modelo}</td>
+                <td>${marca}</td>
+                <td>${codigo}</td>
+                <td>${estado}</td>
+            </tr>`;
+            document.getElementById("base-datos-equipos").innerHTML += row;
 
-            alert("Equipo registrado correctamente.");
+            alert(`Equipo registrado:\n\nNombre: ${nombreCliente}\nModelo: ${modelo}\nMarca: ${marca}\nCódigo: ${codigo}\nEstado: ${estado}`);
             document.getElementById("registro-equipo").reset();
-            document.getElementById("codigo").value = Math.floor(10000 + Math.random() * 90000); // Generar nuevo código
-
             return false; // Evita el envío del formulario
         }
-    </script>
 
-    <style>
-        .inbox {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-top: 10px;
+        function loadMessages() {
+            const mensajesContainer = document.getElementById("mensajes");
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('mensaje_')) {
+                    const mensajeData = JSON.parse(localStorage.getItem(key));
+                    const row = `<tr>
+                        <td>${mensajeData.fecha}</td>
+                        <td>${mensajeData.asunto}</td>
+                        <td>${mensajeData.emisor}</td>
+                        <td>${mensajeData.mensaje}</td>
+                        <td>${mensajeData.codigoIdentificacion}</td>
+                    </tr>`;
+                    mensajesContainer.innerHTML += row;
+                }
+            }
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-    </style>
+    </script>
 </body>
 </html>
