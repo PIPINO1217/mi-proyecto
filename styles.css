@@ -2,14 +2,14 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: white;
+    background-color: #f9f9f9;
     color: black;
 }
 
 header {
-    background-color: pink; /* Color rosa */
+    background-color: pink; /* Rosa */
     color: white;
-    padding: 10px 0;
+    padding: 15px 0;
     text-align: center;
 }
 
@@ -20,13 +20,47 @@ nav ul {
 
 nav ul li {
     display: inline;
-    margin: 0 15px;
+    margin: 0 20px;
 }
 
 main {
     padding: 20px;
 }
 
+h2 {
+    color: #333;
+}
+
 form {
     margin-top: 20px;
+}
+
+input[type="text"], input[type="password"], textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: pink; /* Rosa */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #d68d8d; /* Color al pasar el ratón */
+}
+
+footer {
+    text-align: center;
+    padding: 15px 0;
+    background-color: #eee;
+    position: relative;
+    bottom: 0;
+    width: 100%;
 }
