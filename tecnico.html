@@ -23,16 +23,45 @@
             <input type="password" id="password" placeholder="Ingresa tu contraseña" required>
             <button type="submit">Ingresar</button>
         </form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Técnico - Gestión de Equipos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Técnico</h1>
+        <nav>
+            <ul>
+                <li><a class="button" href="index.html">Inicio</a></li>
+                <li><a class="button" href="cliente.html">Cliente</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div id="login-section">
+            <h2>Ingreso</h2>
+            <form onsubmit="return validateLogin()">
+                <label for="password">Código de Acceso:</label>
+                <input type="password" id="password" placeholder="Ingresa tu código" required>
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
 
-        <h2>Cargar Equipo</h2>
-        <form>
-            <label for="equipo">Nombre del Equipo:</label>
-            <input type="text" id="equipo" placeholder="Ingresa el nombre del equipo" required>
-            <button type="submit">Registrar</button>
-        </form>
+        <div id="main-section" style="display: none;">
+            <h2>Cargar Equipo</h2>
+            <form>
+                <label for="equipo">Nombre del Equipo:</label>
+                <input type="text" id="equipo" placeholder="Ingresa el nombre del equipo" required>
+                <button type="submit">Registrar</button>
+            </form>
 
-        <h2>Bandeja de Entrada</h2>
-        <p>Aquí se mostrarán los mensajes de los clientes.</p>
+            <h2>Bandeja de Entrada</h2>
+            <p>Aquí se mostrarán los mensajes de los clientes.</p>
+        </div>
     </main>
     <footer>
         <p>&copy; 2024 Gestión de Equipos</p>
@@ -41,11 +70,14 @@
     <script>
         function validateLogin() {
             const password = document.getElementById("password").value;
-            if (password !== "1247") {
-                alert("Contraseña incorrecta");
-                return false;
+            if (password === "1247") {
+                document.getElementById("login-section").style.display = "none";
+                document.getElementById("main-section").style.display = "block";
+                return false; // Evita el envío del formulario
+            } else {
+                alert("Código incorrecto");
+                return false; // Evita el envío del formulario
             }
-            return true;
         }
     </script>
 </body>
