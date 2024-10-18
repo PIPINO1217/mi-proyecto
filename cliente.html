@@ -17,22 +17,59 @@
         </nav>
     </header>
     <main>
-        <h2>Consultar Estado de mi Equipo</h2>
-        <form>
-            <label for="codigo">Código Único:</label>
-            <input type="text" id="codigo" placeholder="Ingresa tu código único" required>
+        <h2>Consultar Estado de Equipo</h2>
+        <form id="consulta-form" onsubmit="return consultarEstado()">
+            <label for="codigo-consulta">Código Único:</label>
+            <input type="text" id="codigo-consulta" placeholder="Ingresa tu código único" required>
             <button type="submit">Consultar Estado</button>
         </form>
+        <div id="resultado-consulta" style="display: none;">
+            <h3>Estado de tu Equipo</h3>
+            <p id="estado-equipo"></p>
+        </div>
 
         <h2>Contacto</h2>
-        <form>
+        <form id="contacto-form" onsubmit="return enviarMensaje()">
+            <label for="nombre-cliente">Nombre y Apellido:</label>
+            <input type="text" id="nombre-cliente" placeholder="Ingresa tu nombre y apellido" required>
+
+            <label for="asunto">Asunto:</label>
+            <input type="text" id="asunto" placeholder="Asunto del mensaje" required>
+
             <label for="mensaje">Mensaje:</label>
             <textarea id="mensaje" placeholder="Escribe tu mensaje" required></textarea>
-            <button type="submit">Enviar</button>
+
+            <button type="submit">Enviar Mensaje</button>
         </form>
     </main>
     <footer>
         <p>&copy; 2024 Gestión de Equipos</p>
     </footer>
+
+    <script>
+        // Simulación de base de datos de equipos (esto se puede reemplazar por una base de datos real)
+        const equipos = {
+            "12345": "Equipo en reparación, se estima finalización en 3 días.",
+            "67890": "Equipo reparado, listo para ser retirado.",
+        };
+
+        function consultarEstado() {
+            const codigo = document.getElementById("codigo-consulta").value;
+            const estado = equipos[codigo] || "Código no encontrado. Por favor verifica tu código.";
+            document.getElementById("estado-equipo").innerText = estado;
+            document.getElementById("resultado-consulta").style.display = "block";
+            return false; // Evita el envío del formulario
+        }
+
+        function enviarMensaje() {
+            const nombreCliente = document.getElementById("nombre-cliente").value;
+            const asunto = document.getElementById("asunto").value;
+            const mensaje = document.getElementById("mensaje").value;
+
+            alert(`Mensaje enviado:\n\nEmisor: ${nombreCliente}\nAsunto: ${asunto}\nMensaje: ${mensaje}`);
+            document.getElementById("contacto-form").reset();
+            return false; // Evita el envío del formulario
+        }
+    </script>
 </body>
 </html>
