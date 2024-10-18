@@ -3,8 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cliente - Consulta de Estado</title>
+    <title>Cliente - Gestión de Equipos</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilo para las tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #ff00f3;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .consultar-container {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -17,16 +40,14 @@
         </nav>
     </header>
     <main>
-        <h2>Consultar Estado de Equipo</h2>
-        <form onsubmit="return checkStatus()">
-            <label for="codigo-identificacion">Código de Identificación:</label>
-            <input type="text" id="codigo-identificacion" placeholder="Ingresa el código" required>
-            <button type="submit">Consultar</button>
-        </form>
-        
-        <div id="resultado" style="display:none;">
-            <h3>Estado del Equipo</h3>
-            <table>
+        <div class="consultar-container">
+            <h2>Consultar Estado de Equipos</h2>
+            <form onsubmit="return consultarEstado()">
+                <label for="codigo-consulta">Código de Identificación:</label>
+                <input type="text" id="codigo-consulta" placeholder="Ingresa tu código" required>
+                <button type="submit">Consultar</button>
+            </form>
+            <table id="resultado-consulta" style="display: none;">
                 <thead>
                     <tr>
                         <th>Nombre y Apellido</th>
@@ -42,41 +63,46 @@
                         <th>Estado</th>
                     </tr>
                 </thead>
-                <tbody id="datos-equipo"></tbody>
+                <tbody id="datos-consulta"></tbody>
             </table>
         </div>
 
-        <h2>Contacto</h2>
-        <form id="contacto-form" onsubmit="return sendMessage()">
-            <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" required>
+        <div class="contacto-container">
+            <h2>Contacto</h2>
+            <form id="contacto-form" onsubmit="return enviarMensaje()">
+                <label for="fecha">Fecha:</label>
+                <input type="date" id="fecha" required>
 
-            <label for="asunto">Asunto:</label>
-            <input type="text" id="asunto" placeholder="Ingresa el asunto" required>
+                <label for="asunto">Asunto:</label>
+                <input type="text" id="asunto" required>
 
-            <label for="emisor">Emisor:</label>
-            <input type="text" id="emisor" placeholder="Tu nombre" required>
+                <label for="emisor">Emisor:</label>
+                <input type="text" id="emisor" required>
 
-            <label for="mensaje">Mensaje:</label>
-            <textarea id="mensaje" placeholder="Escribe tu mensaje" required></textarea>
+                <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" required></textarea>
 
-            <label for="codigo-identificacion-contacto">Código de Identificación:</label>
-            <input type="text" id="codigo-identificacion-contacto" placeholder="Opcional">
+                <label for="codigo-identificacion">Código Identificación:</label>
+                <input type="text" id="codigo-identificacion" placeholder="Opcional">
 
-            <button type="submit">Enviar Mensaje</button>
-        </form>
+                <button type="submit">Enviar Mensaje</button>
+            </form>
+        </div>
     </main>
     <footer>
         <p>&copy; 2024 Gestión de Equipos</p>
     </footer>
 
     <script>
-        function checkStatus() {
-            const codigo = document.getElementById("codigo-identificacion").value;
-            const equipoData = localStorage.getItem(`equipo_${codigo}`);
+        function consultarEstado() {
+            const codigo = document.getElementById("codigo-consulta").value;
+            const equipo = JSON.parse(localStorage.getItem(`equipo_${codigo}`));
 
-            if (equipoData) {
-                const equipo = JSON.parse(equipoData);
+            const resultadoConsulta = document.getElementById("resultado-consulta");
+            const datosConsulta = document.getElementById("datos-consulta");
+            datosConsulta.innerHTML = ''; // Limpiar tabla antes de mostrar nuevos datos
+
+            if (equipo) {
                 const row = `<tr>
                     <td>${equipo.nombreCliente}</td>
                     <td>${equipo.modelo}</td>
@@ -90,37 +116,35 @@
                     <td>${equipo.comentarios}</td>
                     <td>${equipo.estado}</td>
                 </tr>`;
-                document.getElementById("datos-equipo").innerHTML = row;
-                document.getElementById("resultado").style.display = "block";
+                datosConsulta.innerHTML = row;
+                resultadoConsulta.style.display = 'table'; // Mostrar tabla con resultados
             } else {
-                alert("Código de identificación no encontrado.");
+                alert("No se encontró información para el código proporcionado.");
             }
-            return false; // Evita el envío del formulario
+            return false; // Evitar el envío del formulario
         }
 
-        function sendMessage() {
+        function enviarMensaje() {
             const fecha = document.getElementById("fecha").value;
             const asunto = document.getElementById("asunto").value;
             const emisor = document.getElementById("emisor").value;
             const mensaje = document.getElementById("mensaje").value;
-            const codigoIdentificacion = document.getElementById("codigo-identificacion-contacto").value;
+            const codigoIdentificacion = document.getElementById("codigo-identificacion").value;
 
-            // Crear un objeto de mensaje
             const mensajeData = {
-                fecha: fecha,
-                asunto: asunto,
-                emisor: emisor,
-                mensaje: mensaje,
-                codigoIdentificacion: codigoIdentificacion
+                fecha,
+                asunto,
+                emisor,
+                mensaje,
+                codigoIdentificacion
             };
 
-            // Almacenar el mensaje en localStorage
-            const mensajeKey = `mensaje_${new Date().getTime()}`; // Generar clave única
-            localStorage.setItem(mensajeKey, JSON.stringify(mensajeData));
+            localStorage.setItem(`mensaje_${mensajeCount++}`, JSON.stringify(mensajeData));
+            alert("Mensaje enviado exitosamente.");
 
-            alert("Mensaje enviado correctamente.");
+            // Limpiar el formulario
             document.getElementById("contacto-form").reset();
-            return false; // Evita el envío del formulario
+            return false; // Evitar el envío del formulario
         }
     </script>
 </body>
