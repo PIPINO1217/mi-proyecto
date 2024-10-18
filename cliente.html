@@ -30,14 +30,20 @@
 
         <h2>Contacto</h2>
         <form id="contacto-form" onsubmit="return enviarMensaje()">
-            <label for="nombre-cliente">Nombre y Apellido:</label>
-            <input type="text" id="nombre-cliente" placeholder="Ingresa tu nombre y apellido" required>
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" required>
 
             <label for="asunto">Asunto:</label>
             <input type="text" id="asunto" placeholder="Asunto del mensaje" required>
 
+            <label for="nombre-cliente">Nombre y Apellido:</label>
+            <input type="text" id="nombre-cliente" placeholder="Ingresa tu nombre y apellido" required>
+
             <label for="mensaje">Mensaje:</label>
             <textarea id="mensaje" placeholder="Escribe tu mensaje" required></textarea>
+
+            <label for="codigo-identificacion">Código Identificación:</label>
+            <input type="text" id="codigo-identificacion" placeholder="Ingresa tu código único" required>
 
             <button type="submit">Enviar Mensaje</button>
         </form>
@@ -62,9 +68,21 @@
         }
 
         function enviarMensaje() {
+            const fecha = document.getElementById("fecha").value;
             const nombreCliente = document.getElementById("nombre-cliente").value;
             const asunto = document.getElementById("asunto").value;
             const mensaje = document.getElementById("mensaje").value;
+            const codigoIdentificacion = document.getElementById("codigo-identificacion").value;
+
+            // Guardar el mensaje en el almacenamiento local para simular el almacenamiento
+            const mensajeData = {
+                fecha: fecha,
+                asunto: asunto,
+                emisor: nombreCliente,
+                mensaje: mensaje,
+                codigoIdentificacion: codigoIdentificacion
+            };
+            localStorage.setItem(`mensaje_${fecha}`, JSON.stringify(mensajeData));
 
             alert(`Mensaje enviado:\n\nEmisor: ${nombreCliente}\nAsunto: ${asunto}\nMensaje: ${mensaje}`);
             document.getElementById("contacto-form").reset();
