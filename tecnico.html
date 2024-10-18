@@ -5,6 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Técnico - Gestión de Equipos</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilo para las tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #ff00f3;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .inbox {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -70,39 +96,41 @@
             </form>
 
             <h2>Bandeja de Entrada</h2>
-            <div id="bandeja-entrada">
+            <div class="inbox">
                 <h3>Mensajes de Contacto</h3>
-                <div class="inbox">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Asunto</th>
-                                <th>Emisor</th>
-                                <th>Mensaje</th>
-                                <th>Código Identificación</th>
-                            </tr>
-                        </thead>
-                        <tbody id="mensajes"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <h2>Base de Datos de Equipos</h2>
-            <div id="base-datos">
                 <table>
                     <thead>
                         <tr>
-                            <th>Nombre y Apellido</th>
-                            <th>Modelo</th>
-                            <th>Marca</th>
-                            <th>Código</th>
-                            <th>Estado</th>
+                            <th>Fecha</th>
+                            <th>Asunto</th>
+                            <th>Emisor</th>
+                            <th>Mensaje</th>
+                            <th>Código Identificación</th>
                         </tr>
                     </thead>
-                    <tbody id="base-datos-equipos"></tbody>
+                    <tbody id="mensajes"></tbody>
                 </table>
             </div>
+
+            <h2>Base de Datos de Equipos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre y Apellido</th>
+                        <th>Modelo</th>
+                        <th>Marca</th>
+                        <th>Código Identificación</th>
+                        <th>Test</th>
+                        <th>Fecha de Ingreso</th>
+                        <th>Fecha de Retiro</th>
+                        <th>Diagnóstico</th>
+                        <th>Presupuesto</th>
+                        <th>Comentarios</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="base-datos-equipos"></tbody>
+            </table>
         </div>
     </main>
     <footer>
@@ -143,13 +171,29 @@
                 modelo: modelo,
                 marca: marca,
                 codigo: codigo,
+                test: test,
+                fechaIngreso: fechaIngreso,
+                fechaRetiro: fechaRetiro,
+                diagnostico: diagnostico,
+                presupuesto: presupuesto,
+                comentarios: comentarios,
                 estado: estado,
             };
+
+            // Guardar equipo en el almacenamiento local
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
+
             const row = `<tr>
                 <td>${nombreCliente}</td>
                 <td>${modelo}</td>
                 <td>${marca}</td>
                 <td>${codigo}</td>
+                <td>${test}</td>
+                <td>${fechaIngreso}</td>
+                <td>${fechaRetiro}</td>
+                <td>${diagnostico}</td>
+                <td>${presupuesto}</td>
+                <td>${comentarios}</td>
                 <td>${estado}</td>
             </tr>`;
             document.getElementById("base-datos-equipos").innerHTML += row;
