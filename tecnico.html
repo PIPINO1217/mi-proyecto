@@ -146,6 +146,7 @@
                 document.getElementById("login-section").style.display = "none";
                 document.getElementById("main-section").style.display = "block";
                 generateCodigo(); // Generar el código al ingresar
+                loadEquipos(); // Cargar equipos al inicio
                 return false;
             } else {
                 alert("Código incorrecto.");
@@ -189,25 +190,38 @@
             localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
 
             // Actualizar tabla de la base de datos
-            const row = `<tr>
-                <td>${nombreCliente}</td>
-                <td>${modelo}</td>
-                <td>${marca}</td>
-                <td>${codigo}</td>
-                <td>${test}</td>
-                <td>${fechaIngreso}</td>
-                <td>${fechaRetiro}</td>
-                <td>${diagnostico}</td>
-                <td>${presupuesto}</td>
-                <td>${comentarios}</td>
-                <td>${estado}</td>
-            </tr>`;
-            document.getElementById("datos-equipos").innerHTML += row;
+            updateEquiposTable(equipoData);
 
             // Resetear el formulario
             document.getElementById("registro-equipo").reset();
             generateCodigo(); // Generar nuevo código después de registrar
             return false; // Evita el envío del formulario
+        }
+
+        function updateEquiposTable(equipo) {
+            const row = `<tr>
+                <td>${equipo.nombreCliente}</td>
+                <td>${equipo.modelo}</td>
+                <td>${equipo.marca}</td>
+                <td>${equipo.codigo}</td>
+                <td>${equipo.test}</td>
+                <td>${equipo.fechaIngreso}</td>
+                <td>${equipo.fechaRetiro}</td>
+                <td>${equipo.diagnostico}</td>
+                <td>${equipo.presupuesto}</td>
+                <td>${equipo.comentarios}</td>
+                <td>${equipo.estado}</td>
+            </tr>`;
+            document.getElementById("datos-equipos").innerHTML += row;
+        }
+
+        function loadEquipos() {
+            const equipos = Object.keys(localStorage)
+                .filter(key => key.startsWith("equipo_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            const equiposTableBody = document.getElementById("datos-equipos");
+            equipos.forEach(equipo => updateEquiposTable(equipo));
         }
 
         function loadMessages() {
