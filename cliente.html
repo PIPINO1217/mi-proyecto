@@ -45,6 +45,26 @@
                 <tbody id="datos-equipo"></tbody>
             </table>
         </div>
+
+        <h2>Contacto</h2>
+        <form id="contacto-form" onsubmit="return sendMessage()">
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" required>
+
+            <label for="asunto">Asunto:</label>
+            <input type="text" id="asunto" placeholder="Ingresa el asunto" required>
+
+            <label for="emisor">Emisor:</label>
+            <input type="text" id="emisor" placeholder="Tu nombre" required>
+
+            <label for="mensaje">Mensaje:</label>
+            <textarea id="mensaje" placeholder="Escribe tu mensaje" required></textarea>
+
+            <label for="codigo-identificacion-contacto">Código de Identificación:</label>
+            <input type="text" id="codigo-identificacion-contacto" placeholder="Opcional">
+
+            <button type="submit">Enviar Mensaje</button>
+        </form>
     </main>
     <footer>
         <p>&copy; 2024 Gestión de Equipos</p>
@@ -75,6 +95,31 @@
             } else {
                 alert("Código de identificación no encontrado.");
             }
+            return false; // Evita el envío del formulario
+        }
+
+        function sendMessage() {
+            const fecha = document.getElementById("fecha").value;
+            const asunto = document.getElementById("asunto").value;
+            const emisor = document.getElementById("emisor").value;
+            const mensaje = document.getElementById("mensaje").value;
+            const codigoIdentificacion = document.getElementById("codigo-identificacion-contacto").value;
+
+            // Crear un objeto de mensaje
+            const mensajeData = {
+                fecha: fecha,
+                asunto: asunto,
+                emisor: emisor,
+                mensaje: mensaje,
+                codigoIdentificacion: codigoIdentificacion
+            };
+
+            // Almacenar el mensaje en localStorage
+            const mensajeKey = `mensaje_${new Date().getTime()}`; // Generar clave única
+            localStorage.setItem(mensajeKey, JSON.stringify(mensajeData));
+
+            alert("Mensaje enviado correctamente.");
+            document.getElementById("contacto-form").reset();
             return false; // Evita el envío del formulario
         }
     </script>
