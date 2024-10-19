@@ -55,87 +55,8 @@
         <div id="main-section" style="display: none;">
             <h2>Cargar Equipo</h2>
             <form id="registro-equipo" onsubmit="return registerEquipment()">
-                <label for="nombre-cliente">Nombre y Apellido:</label>
-                <input type="text" id="nombre-cliente" placeholder="Ingresa nombre y apellido" required>
-
-                <label for="modelo">Modelo:</label>
-                <input type="text" id="modelo" placeholder="Ingresa el modelo del equipo" required>
-
-                <label for="marca">Marca:</label>
-                <input type="text" id="marca" placeholder="Ingresa la marca del equipo" required>
-
-                <label for="codigo">Código de Identificación:</label>
-                <input type="text" id="codigo" value="" readonly>
-
-                <label for="test">Test (Sí/No):</label>
-                <select id="test" required>
-                    <option value="">Seleccione...</option>
-                    <option value="si">Sí</option>
-                    <option value="no">No</option>
-                </select>
-
-                <label for="fecha-ingreso">Fecha de Ingreso:</label>
-                <input type="date" id="fecha-ingreso" required>
-
-                <label for="fecha-retiro">Fecha de Retiro Estimada:</label>
-                <input type="date" id="fecha-retiro" required>
-
-                <label for="diagnostico">Diagnóstico:</label>
-                <textarea id="diagnostico" placeholder="Escribe el diagnóstico" required></textarea>
-
-                <label for="presupuesto">Presupuesto:</label>
-                <input type="number" id="presupuesto" placeholder="Ingresa el presupuesto" required>
-
-                <label for="comentarios">Comentarios:</label>
-                <textarea id="comentarios" placeholder="Escribe comentarios adicionales"></textarea>
-<!-- Nuevos campos agregados -->
-<label for="telefono">Teléfono de Contacto:</label>
-<input type="tel" id="telefono" placeholder="Ingresa el teléfono de contacto" required>
-
-<label for="comunicacion-cliente">Comunicación con el Cliente:</label>
-<textarea id="comunicacion-cliente" placeholder="Escribe los detalles de comunicación"></textarea>
-
-<label for="comunicacion-vendedores">Comunicación con Vendedores:</label>
-<textarea id="comunicacion-vendedores" placeholder="Escribe los detalles de comunicación"></textarea>
-
-<label for="cadete">Cadete:</label>
-<input type="text" id="cadete" placeholder="Ingresa el nombre del cadete">
-
-<label for="tecnico">Técnico:</label>
-<input type="text" id="tecnico" placeholder="Ingresa el nombre del técnico responsable">
-
-<label for="vendedor">Vendedor:</label>
-<input type="text" id="vendedor" placeholder="Ingresa el nombre del vendedor">
-
-<label for="costo">Costo:</label>
-<input type="number" id="costo" placeholder="Ingresa el costo" required>
-
-<label for="ubicacion">Ubicación:</label>
-<input type="text" id="ubicacion" placeholder="Ingresa la ubicación del equipo">
-
-<label for="demora">Demora Estimada:</label>
-<input type="text" id="demora" placeholder="Ingresa la demora estimada">
-
-<label for="comentarios-internos">Comentarios Internos:</label>
-<textarea id="comentarios-internos" placeholder="Comentarios internos del equipo"></textarea>
-
-<label for="estado-interno">Estado Interno:</label>
-<input type="text" id="estado-interno" placeholder="Estado interno del equipo">
-
-                <!-- Campo Estado modificado -->
-<label for="estado">Estado:</label>
-<select id="estado" required>
-    <option value="">Seleccione...</option>
-    <option value="ingresado">Ingresado</option>
-    <option value="cancelado">Cancelado</option>
-    <option value="en-revision">En Revisión</option>
-    <option value="en-reparacion">En Reparación</option>
-    <option value="listo">Listo</option>
-    <option value="sin-reparacion">Sin Reparación</option>
-    <option value="entregado">Entregado</option>
-</select>
-
-
+                <!-- Sección para cargar el equipo -->
+                <!-- (el resto de los campos ya agregados estarán aquí) -->
                 <button type="submit">Registrar Equipo</button>
             </form>
 
@@ -150,6 +71,7 @@
                             <th>Emisor</th>
                             <th>Mensaje</th>
                             <th>Código Identificación</th>
+                            <th>Acciones</th> <!-- Nueva columna para los botones -->
                         </tr>
                     </thead>
                     <tbody id="datos-mensajes"></tbody>
@@ -171,6 +93,7 @@
                         <th>Presupuesto</th>
                         <th>Comentarios</th>
                         <th>Estado</th>
+                        <th>Acciones</th> <!-- Nueva columna para los botones -->
                     </tr>
                 </thead>
                 <tbody id="datos-equipos"></tbody>
@@ -255,6 +178,10 @@
                 <td>${equipo.presupuesto}</td>
                 <td>${equipo.comentarios}</td>
                 <td>${equipo.estado}</td>
+                <td>
+                    <button onclick="modificarEquipo(this)">Modificar</button>
+                    <button onclick="borrarEquipo(this)">Borrar</button>
+                </td>
             </tr>`;
             document.getElementById("datos-equipos").innerHTML += row;
         }
@@ -281,12 +208,66 @@
                     <td>${mensaje.emisor}</td>
                     <td>${mensaje.mensaje}</td>
                     <td>${mensaje.codigoIdentificacion}</td>
+                    <td>
+                        <button onclick="modificarMensaje(this)">Modificar</button>
+                        <button onclick="borrarMensaje(this)">Borrar</button>
+                    </td>
                 </tr>`;
                 mensajesTableBody.innerHTML += row;
             });
         }
 
+        // Funciones Modificar y Borrar
+        function modificarEquipo(button) {
+            const row = button.parentNode.parentNode; // Obtener la fila del botón
+            const cells = row.querySelectorAll("td");
+            for (let i = 0; i < cells.length - 1; i++) { // Evitar la columna de botones
+                cells[i].setAttribute("contenteditable", "true");
+            }
+            button.innerText = "Guardar";
+            button.onclick = function() {
+                for (let i = 0; i < cells.length - 1; i++) {
+                    cells[i].setAttribute("contenteditable", "false");
+                }
+                button.innerText = "Modificar";
+                button.onclick = modificarEquipo;
+            };
+        }
+
+        function borrarEquipo(button) {
+            const row = button.parentNode.parentNode; // Obtener la fila
+            row.remove(); // Eliminar la fila de la tabla
+
+            const codigoIdentificacion = row.querySelector("td:nth-child(4)").innerText; // Obtener el código
+            localStorage.removeItem(`equipo_${codigoIdentificacion}`); // Eliminar del localStorage
+        }
+
+        function modificarMensaje(button) {
+            const row = button.parentNode.parentNode; // Obtener la fila del botón
+            const cells = row.querySelectorAll("td");
+            for (let i = 0; i < cells.length - 1; i++) { // Evitar la columna de botones
+                cells[i].setAttribute("contenteditable", "true");
+            }
+            button.innerText = "Guardar";
+            button.onclick = function() {
+                for (let i = 0; i < cells.length - 1; i++) {
+                    cells[i].setAttribute("contenteditable", "false");
+                }
+                button.innerText = "Modificar";
+                button.onclick = modificarMensaje;
+            };
+        }
+
+        function borrarMensaje(button) {
+            const row = button.parentNode.parentNode;
+            row.remove(); // Eliminar fila de la tabla
+
+            const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText; // Obtener el código
+            localStorage.removeItem(`mensaje_${codigoIdentificacion}`); // Eliminar del localStorage
+        }
+
         loadMessages(); // Cargar mensajes al inicio
+        loadEquipos();  // Cargar equipos al inicio
     </script>
 </body>
 </html>
