@@ -58,58 +58,11 @@
                 <label for="nombre-cliente">Nombre y Apellido:</label>
                 <input type="text" id="nombre-cliente" placeholder="Ingresa nombre y apellido" required>
 
-                <label for="telefono">Teléfono de Contacto:</label>
-                <input type="tel" id="telefono" placeholder="Ingresa el teléfono de contacto" required>
-
-                <label for="comunicacion-cliente">Comunicación con el Cliente:</label>
-                <textarea id="comunicacion-cliente" placeholder="Escribe los detalles de comunicación"></textarea>
-
-                <label for="comunicacion-vendedores">Comunicación con Vendedores:</label>
-                <textarea id="comunicacion-vendedores" placeholder="Escribe los detalles de comunicación"></textarea>
-
-                <label for="cadete">Cadete:</label>
-                <input type="text" id="cadete" placeholder="Ingresa el nombre del cadete">
-
-                <label for="tecnico">Técnico:</label>
-                <input type="text" id="tecnico" placeholder="Ingresa el nombre del técnico responsable">
-
-                <label for="vendedor">Vendedor:</label>
-                <input type="text" id="vendedor" placeholder="Ingresa el nombre del vendedor">
-
-                <label for="costo">Costo:</label>
-                <input type="number" id="costo" placeholder="Ingresa el costo" required>
-
-                <label for="ubicacion">Ubicación:</label>
-                <input type="text" id="ubicacion" placeholder="Ingresa la ubicación del equipo">
-
-                <label for="demora">Demora Estimada:</label>
-                <input type="text" id="demora" placeholder="Ingresa la demora estimada">
-
-                <label for="comentarios-internos">Comentarios Internos:</label>
-                <textarea id="comentarios-internos" placeholder="Comentarios internos del equipo"></textarea>
-
-                <label for="estado-interno">Estado Interno:</label>
-                <input type="text" id="estado-interno" placeholder="Estado interno del equipo">
-
-                <!-- Modificación del campo 'Estado' -->
-                <label for="estado">Estado:</label>
-                <select id="estado" required>
-                    <option value="">Seleccione...</option>
-                    <option value="ingresado">Ingresado</option>
-                    <option value="cancelado">Cancelado</option>
-                    <option value="en-revision">En Revisión</option>
-                    <option value="en-reparacion">En Reparación</option>
-                    <option value="listo">Listo</option>
-                    <option value="sin-reparacion">Sin Reparación</option>
-                    <option value="entregado">Entregado</option>
-                </select>
-
-                <!-- Ajuste: Marca antes que Modelo -->
-                <label for="marca">Marca:</label>
-                <input type="text" id="marca" placeholder="Ingresa la marca del equipo" required>
-
                 <label for="modelo">Modelo:</label>
                 <input type="text" id="modelo" placeholder="Ingresa el modelo del equipo" required>
+
+                <label for="marca">Marca:</label>
+                <input type="text" id="marca" placeholder="Ingresa la marca del equipo" required>
 
                 <label for="codigo">Código de Identificación:</label>
                 <input type="text" id="codigo" value="" readonly>
@@ -135,6 +88,53 @@
 
                 <label for="comentarios">Comentarios:</label>
                 <textarea id="comentarios" placeholder="Escribe comentarios adicionales"></textarea>
+<!-- Nuevos campos agregados -->
+<label for="telefono">Teléfono de Contacto:</label>
+<input type="tel" id="telefono" placeholder="Ingresa el teléfono de contacto" required>
+
+<label for="comunicacion-cliente">Comunicación con el Cliente:</label>
+<textarea id="comunicacion-cliente" placeholder="Escribe los detalles de comunicación"></textarea>
+
+<label for="comunicacion-vendedores">Comunicación con Vendedores:</label>
+<textarea id="comunicacion-vendedores" placeholder="Escribe los detalles de comunicación"></textarea>
+
+<label for="cadete">Cadete:</label>
+<input type="text" id="cadete" placeholder="Ingresa el nombre del cadete">
+
+<label for="tecnico">Técnico:</label>
+<input type="text" id="tecnico" placeholder="Ingresa el nombre del técnico responsable">
+
+<label for="vendedor">Vendedor:</label>
+<input type="text" id="vendedor" placeholder="Ingresa el nombre del vendedor">
+
+<label for="costo">Costo:</label>
+<input type="number" id="costo" placeholder="Ingresa el costo" required>
+
+<label for="ubicacion">Ubicación:</label>
+<input type="text" id="ubicacion" placeholder="Ingresa la ubicación del equipo">
+
+<label for="demora">Demora Estimada:</label>
+<input type="text" id="demora" placeholder="Ingresa la demora estimada">
+
+<label for="comentarios-internos">Comentarios Internos:</label>
+<textarea id="comentarios-internos" placeholder="Comentarios internos del equipo"></textarea>
+
+<label for="estado-interno">Estado Interno:</label>
+<input type="text" id="estado-interno" placeholder="Estado interno del equipo">
+
+                <!-- Campo Estado modificado -->
+<label for="estado">Estado:</label>
+<select id="estado" required>
+    <option value="">Seleccione...</option>
+    <option value="ingresado">Ingresado</option>
+    <option value="cancelado">Cancelado</option>
+    <option value="en-revision">En Revisión</option>
+    <option value="en-reparacion">En Reparación</option>
+    <option value="listo">Listo</option>
+    <option value="sin-reparacion">Sin Reparación</option>
+    <option value="entregado">Entregado</option>
+</select>
+
 
                 <button type="submit">Registrar Equipo</button>
             </form>
@@ -180,5 +180,113 @@
     <footer>
         <p>&copy; 2024 Gestión de Equipos</p>
     </footer>
+
+    <script>
+        let mensajeCount = 0;
+
+        function validateLogin() {
+            const password = document.getElementById("password").value;
+            if (password === "1247") {
+                document.getElementById("login-section").style.display = "none";
+                document.getElementById("main-section").style.display = "block";
+                generateCodigo(); // Generar el código al ingresar
+                loadEquipos(); // Cargar equipos al inicio
+                return false;
+            } else {
+                alert("Código incorrecto.");
+                return false;
+            }
+        }
+
+        function generateCodigo() {
+            const codigo = Math.floor(10000 + Math.random() * 90000).toString(); // Genera un código de 5 dígitos
+            document.getElementById("codigo").value = codigo;
+        }
+
+        function registerEquipment() {
+            const nombreCliente = document.getElementById("nombre-cliente").value;
+            const modelo = document.getElementById("modelo").value;
+            const marca = document.getElementById("marca").value;
+            const codigo = document.getElementById("codigo").value; // Obtener el código generado
+            const test = document.getElementById("test").value;
+            const fechaIngreso = document.getElementById("fecha-ingreso").value;
+            const fechaRetiro = document.getElementById("fecha-retiro").value;
+            const diagnostico = document.getElementById("diagnostico").value;
+            const presupuesto = document.getElementById("presupuesto").value;
+            const comentarios = document.getElementById("comentarios").value;
+            const estado = document.getElementById("estado").value;
+
+            const equipoData = {
+                nombreCliente,
+                modelo,
+                marca,
+                codigo,
+                test,
+                fechaIngreso,
+                fechaRetiro,
+                diagnostico,
+                presupuesto,
+                comentarios,
+                estado
+            };
+
+            // Almacenar en localStorage
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
+
+            // Actualizar tabla de la base de datos
+            updateEquiposTable(equipoData);
+
+            // Resetear el formulario
+            document.getElementById("registro-equipo").reset();
+            generateCodigo(); // Generar nuevo código después de registrar
+            return false; // Evita el envío del formulario
+        }
+
+        function updateEquiposTable(equipo) {
+            const row = `<tr>
+                <td>${equipo.nombreCliente}</td>
+                <td>${equipo.modelo}</td>
+                <td>${equipo.marca}</td>
+                <td>${equipo.codigo}</td>
+                <td>${equipo.test}</td>
+                <td>${equipo.fechaIngreso}</td>
+                <td>${equipo.fechaRetiro}</td>
+                <td>${equipo.diagnostico}</td>
+                <td>${equipo.presupuesto}</td>
+                <td>${equipo.comentarios}</td>
+                <td>${equipo.estado}</td>
+            </tr>`;
+            document.getElementById("datos-equipos").innerHTML += row;
+        }
+
+        function loadEquipos() {
+            const equipos = Object.keys(localStorage)
+                .filter(key => key.startsWith("equipo_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            const equiposTableBody = document.getElementById("datos-equipos");
+            equipos.forEach(equipo => updateEquiposTable(equipo));
+        }
+
+        function loadMessages() {
+            const mensajes = Object.keys(localStorage)
+                .filter(key => key.startsWith("mensaje_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            const mensajesTableBody = document.getElementById("datos-mensajes");
+            mensajes.forEach(mensaje => {
+                const row = `<tr>
+                    <td>${mensaje.fecha}</td>
+                    <td>${mensaje.asunto}</td>
+                    <td>${mensaje.emisor}</td>
+                    <td>${mensaje.mensaje}</td>
+                    <td>${mensaje.codigoIdentificacion}</td>
+                </tr>`;
+                mensajesTableBody.innerHTML += row;
+            });
+        }
+
+        loadMessages(); // Cargar mensajes al inicio
+    </script>
 </body>
 </html>
