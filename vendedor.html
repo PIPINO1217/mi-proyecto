@@ -231,7 +231,7 @@
             };
 
             // Almacenar en localStorage
-            localStorage.setItem(equipo_${codigo}, JSON.stringify(equipoData));
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
 
             // Actualizar tabla de la base de datos
             updateEquiposTable(equipoData);
@@ -243,7 +243,7 @@
         }
 
         function updateEquiposTable(equipo) {
-            const row = <tr>
+            const row = `<tr>
                 <td>${equipo.nombreCliente}</td>
                 <td>${equipo.modelo}</td>
                 <td>${equipo.marca}</td>
@@ -255,7 +255,7 @@
                 <td>${equipo.presupuesto}</td>
                 <td>${equipo.comentarios}</td>
                 <td>${equipo.estado}</td>
-            </tr>;
+            </tr>`;
             document.getElementById("datos-equipos").innerHTML += row;
         }
 
