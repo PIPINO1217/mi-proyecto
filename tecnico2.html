@@ -1,1 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Técnico - Gestión de Equipos</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilo para las tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #ff00f3;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .inbox {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Técnico</h1>
+        <nav>
+            <ul>
+                <li><a class="button" href="index.html">Inicio</a></li>
+                <li><a class="button" href="cliente.html">Cliente</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div id="login-section">
+            <h2>Ingreso de Código de Acceso</h2>
+            <form onsubmit="return validateLogin()">
+                <label for="password">Código de Acceso:</label>
+                <input type="password" id="password" placeholder="Ingresa tu código" required>
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
+
+        <div id="main-section" style="display: none;">
+            <h2>Cargar Equipo</h2>
+            <form id="registro-equipo" onsubmit="return registerEquipment()">
+                <label for="nombre-cliente">Nombre y Apellido:</label>
+                <input type="text" id="nombre-cliente" placeholder="Ingresa nombre y apellido" required>
+
+                <label for="modelo">Modelo:</label>
+                <input type="text" id="modelo" placeholder="Ingresa el modelo del equipo" required>
+
+                <label for="marca">Marca:</label>
+                <input type="text" id="marca" placeholder="Ingresa la marca del equipo" required>
+
+                <label for="codigo">Código de Identificación:</label>
+                <input type="text" id="codigo" value="" readonly>
+
+                <label for="test">Test (Sí/No):</label>
+                <select id="test" required>
+                    <option value="">Seleccione...</option>
+                    <option value="si">Sí</option>
+                    <option value="no">No</option>
+                </select>
+
+                <label for="fecha-ingreso">Fecha de Ingreso:</label>
+                <input type="date" id="fecha-ingreso" required>
+
+                <label for="fecha-retiro">Fecha de Retiro Estimada:</label>
+                <input type="date" id="fecha-retiro" required>
+
+                <label for="diagnostico">Diagnóstico:</label>
+                <textarea id="diagnostico" placeholder="Escribe el diagnóstico" required></textarea>
+
+                <label for="presupuesto">Presupuesto:</label>
+                <input type="number" id="presupuesto" placeholder="Ingresa el presupuesto" required>
+
+                <label for="comentarios">Comentarios:</label>
+                <textarea id="comentarios" placeholder="Escribe comentarios adicionales"></textarea>
+
+                <!-- Nuevos campos agregados -->
+                <label for="telefono">Teléfono de Contacto:</label>
+                <input type="tel" id="telefono" placeholder="Ingresa el teléfono de contacto" required>
+
+                <label for="comunicacion-cliente">Comunicación con el Cliente:</label>
+                <textarea id="comunicacion-cliente" placeholder="Escribe los detalles de comunicación"></textarea>
+
+                <label for="comunicacion-vendedores">Comunicación con Vendedores:</label>
+                <textarea id="comunicacion-vendedores" placeholder="Escribe los detalles de comunicación"></textarea>
+
+                <label for="cadete">Cadete:</label>
+                <input type="text" id="cadete" placeholder="Ingresa el nombre del cadete">
+
+                <label for="tecnico">Técnico:</label>
+                <input type="text" id="tecnico" placeholder="Ingresa el nombre del técnico responsable">
+
+                <label for="vendedor">Vendedor:</label>
+                <input type="text" id="vendedor" placeholder="Ingresa el nombre del vendedor">
+
+                <label for="costo">Costo:</label>
+                <input type="number" id="costo" placeholder="Ingresa el costo" required>
+
+                <label for="ubicacion">Ubicación:</label>
+                <input type="text" id="ubicacion" placeholder="Ingresa la ubicación del equipo">
+
+                <label for="demora">Demora Estimada:</label>
+                <input type="text" id="demora" placeholder="Ingresa la demora estimada">
+
+                <label for="comentarios-internos">Comentarios Internos:</label>
+                <textarea id="comentarios-internos" placeholder="Comentarios internos del equipo"></textarea>
+
+                <label for="estado-interno">Estado Interno:</label>
+                <input type="text" id="estado-interno" placeholder="Estado interno del equipo">
+
+                <!-- Campo Estado modificado -->
+                <label for="estado">Estado:</label>
+                <select id="estado" required>
+                    <option value="">Seleccione...</option>
+                    <option value="ingresado">Ingresado</option>
+                    <option value="cancelado">Cancelado</option>
+                    <option value="en-revision">En Revisión</option>
+                    <option value="en-reparacion">En Reparación</option>
+                    <option value="listo">Listo</option>
+                    <option value="sin-reparacion">Sin Reparación</option>
+                    <option value="entregado">Entregado</option>
+                </select>
+
+                <button type="submit">Registrar Equipo</button>
+            </form>
+
+            <h2>Bandeja de Entrada</h2>
+            <div class="inbox">
+                <h3>Mensajes Recibidos</h3>
+                <table id="bandeja-entrada">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Asunto</th>
+                            <th>Emisor</th>
+                            <th>Mensaje</th>
+                            <th>Código Identificación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="datos-mensajes"></tbody>
+                </table>
+            </div>
+
+            <h2>Base de Datos de Equipos</h2>
+            <table id="base-datos">
+                <thead>
+                    <tr>
+                        <th>Nombre y Apellido</th>
+                        <th>Modelo</th>
+                        <th>Marca</th>
+                        <th>Código Identificación</th>
+                        <th>Test</th>
+                        <th>Fecha de Ingreso</th>
+                        <th>Fecha de Retiro</th>
+                        <th>Diagnóstico</th>
+                        <th>Presupuesto</th>
+                        <th>Comentarios</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="datos-equipos"></tbody>
+            </table>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Gestión de Equipos</p>
+    </footer>
+
+    <script>
+        let mensajeCount = 0;
+
+        function validateLogin() {
+            const password = document.getElementById("password").value;
+            if (password === "1247") {
+                document.getElementById("login-section").style.display = "none";
+                document.getElementById("main-section").style.display = "block";
+                generateCodigo(); // Generar el código al ingresar
+                loadEquipos(); // Cargar equipos al inicio
+                return false;
+            } else {
+                alert("Código incorrecto.");
+                return false;
+            }
+        }
+
+        function generateCodigo() {
+            const codigo = Math.floor(10000 + Math.random() * 90000).toString(); // Genera un código de 5 dígitos
+            document.getElementById("codigo").value = codigo;
+        }
+
+        function registerEquipment() {
+            const nombreCliente = document.getElementById("nombre-cliente").value;
+            const modelo = document.getElementById("modelo").value;
+            const marca = document.getElementById("marca").value;
+            const codigo = document.getElementById("codigo").value; 
+            const test = document.getElementById("test").value;
+            const fechaIngreso = document.getElementById("fecha-ingreso").value;
+            const fechaRetiro = document.getElementById("fecha-retiro").value;
+            const diagnostico = document.getElementById("diagnostico").value;
+            const presupuesto = document.getElementById("presupuesto").value;
+            const comentarios = document.getElementById("comentarios").value;
+            const estado = document.getElementById("estado").value;
+
+            const equipoData = {
+                nombreCliente,
+                modelo,
+                marca,
+                codigo,
+                test,
+                fechaIngreso,
+                fechaRetiro,
+                diagnostico,
+                presupuesto,
+                comentarios,
+                estado
+            };
+
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
+            updateEquiposTable(equipoData);
+            document.getElementById("registro-equipo").reset();
+            generateCodigo();
+            return false; 
+        }
+
+        function updateEquiposTable(equipo) {
+            const row = `<tr>
+                <td>${equipo.nombreCliente}</td>
+                <td>${equipo.modelo}</td>
+                <td>${equipo.marca}</td>
+                <td>${equipo.codigo}</td>
+                <td>${equipo.test}</td>
+                <td>${equipo.fechaIngreso}</td>
+                <td>${equipo.fechaRetiro}</td>
+                <td>${equipo.diagnostico}</td>
+                <td>${equipo.presupuesto}</td>
+                <td>${equipo.comentarios}</td>
+                <td>${equipo.estado}</td>
+                <td>
+                    <button onclick="modificarEquipo(this)">Modificar</button>
+                    <button onclick="borrarEquipo(this)">Borrar</button>
+                </td>
+            </tr>`;
+            document.getElementById("datos-equipos").innerHTML += row;
+        }
+
+        function loadEquipos() {
+            const equipos = Object.keys(localStorage)
+                .filter(key => key.startsWith("equipo_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            const equiposTableBody = document.getElementById("datos-equipos");
+            equipos.forEach(equipo => updateEquiposTable(equipo));
+        }
+
+        function loadMessages() {
+            const mensajes = Object.keys(localStorage)
+                .filter(key => key.startsWith("mensaje_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            const mensajesTableBody = document.getElementById("datos-mensajes");
+            mensajes.forEach(mensaje => {
+                const row = `<tr>
+                    <td>${mensaje.fecha}</td>
+                    <td>${mensaje.asunto}</td>
+                    <td>${mensaje.emisor}</td>
+                    <td>${mensaje.mensaje}</td>
+                    <td>${mensaje.codigoIdentificacion}</td>
+                    <td>
+                        <button onclick="modificarMensaje(this)">Modificar</button>
+                        <button onclick="borrarMensaje(this)">Borrar</button>
+                    </td>
+                </tr>`;
+                mensajesTableBody.innerHTML += row;
+            });
+        }
+
+        // Funciones Modificar y Borrar
+        function modificarEquipo(button) {
+            const row = button.parentNode.parentNode;
+            const cells = row.querySelectorAll("td");
+            for (let i = 0; i < cells.length - 1; i++) {
+                cells[i].setAttribute("contenteditable", "true");
+            }
+            button.innerText = "Guardar";
+            button.onclick = function() {
+                for (let i = 0; i < cells.length - 1; i++) {
+                    cells[i].setAttribute("contenteditable", "false");
+                }
+                button.innerText = "Modificar";
+                button.onclick = modificarEquipo;
+            };
+        }
+
+        function borrarEquipo(button) {
+            const row = button.parentNode.parentNode;
+            row.remove();
+            const codigoIdentificacion = row.querySelector("td:nth-child(4)").innerText;
+            localStorage.removeItem(`equipo_${codigoIdentificacion}`);
+        }
+
+        function modificarMensaje(button) {
+            const row = button.parentNode.parentNode;
+            const cells = row.querySelectorAll("td");
+            for (let i = 0; i < cells.length - 1; i++) {
+                cells[i].setAttribute("contenteditable", "true");
+            }
+            button.innerText = "Guardar";
+            button.onclick = function() {
+                for (let i = 0; i < cells.length - 1; i++) {
+                    cells[i].setAttribute("contenteditable", "false");
+                }
+                button.innerText = "Modificar";
+                button.onclick = modificarMensaje;
+            };
+        }
+
+        function borrarMensaje(button) {
+            const row = button.parentNode.parentNode;
+            row.remove();
+            const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText;
+            localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
+        }
+
+        loadMessages(); // Cargar mensajes al inicio
+        loadEquipos();  // Cargar equipos al inicio
+    </script>
+</body>
+</html>
 
