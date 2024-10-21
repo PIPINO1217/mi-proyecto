@@ -88,53 +88,53 @@
 
                 <label for="comentarios">Comentarios:</label>
                 <textarea id="comentarios" placeholder="Escribe comentarios adicionales"></textarea>
-<!-- Nuevos campos agregados -->
-<label for="telefono">Teléfono de Contacto:</label>
-<input type="tel" id="telefono" placeholder="Ingresa el teléfono de contacto" required>
 
-<label for="comunicacion-cliente">Comunicación con el Cliente:</label>
-<textarea id="comunicacion-cliente" placeholder="Escribe los detalles de comunicación"></textarea>
+                <!-- Nuevos campos agregados -->
+                <label for="telefono">Teléfono de Contacto:</label>
+                <input type="tel" id="telefono" placeholder="Ingresa el teléfono de contacto" required>
 
-<label for="comunicacion-vendedores">Comunicación con Vendedores:</label>
-<textarea id="comunicacion-vendedores" placeholder="Escribe los detalles de comunicación"></textarea>
+                <label for="comunicacion-cliente">Comunicación con el Cliente:</label>
+                <textarea id="comunicacion-cliente" placeholder="Escribe los detalles de comunicación"></textarea>
 
-<label for="cadete">Cadete:</label>
-<input type="text" id="cadete" placeholder="Ingresa el nombre del cadete">
+                <label for="comunicacion-vendedores">Comunicación con Vendedores:</label>
+                <textarea id="comunicacion-vendedores" placeholder="Escribe los detalles de comunicación"></textarea>
 
-<label for="tecnico">Técnico:</label>
-<input type="text" id="tecnico" placeholder="Ingresa el nombre del técnico responsable">
+                <label for="cadete">Cadete:</label>
+                <input type="text" id="cadete" placeholder="Ingresa el nombre del cadete">
 
-<label for="vendedor">Vendedor:</label>
-<input type="text" id="vendedor" placeholder="Ingresa el nombre del vendedor">
+                <label for="tecnico">Técnico:</label>
+                <input type="text" id="tecnico" placeholder="Ingresa el nombre del técnico responsable">
 
-<label for="costo">Costo:</label>
-<input type="number" id="costo" placeholder="Ingresa el costo" required>
+                <label for="vendedor">Vendedor:</label>
+                <input type="text" id="vendedor" placeholder="Ingresa el nombre del vendedor">
 
-<label for="ubicacion">Ubicación:</label>
-<input type="text" id="ubicacion" placeholder="Ingresa la ubicación del equipo">
+                <label for="costo">Costo:</label>
+                <input type="number" id="costo" placeholder="Ingresa el costo" required>
 
-<label for="demora">Demora Estimada:</label>
-<input type="text" id="demora" placeholder="Ingresa la demora estimada">
+                <label for="ubicacion">Ubicación:</label>
+                <input type="text" id="ubicacion" placeholder="Ingresa la ubicación del equipo">
 
-<label for="comentarios-internos">Comentarios Internos:</label>
-<textarea id="comentarios-internos" placeholder="Comentarios internos del equipo"></textarea>
+                <label for="demora">Demora Estimada:</label>
+                <input type="text" id="demora" placeholder="Ingresa la demora estimada">
 
-<label for="estado-interno">Estado Interno:</label>
-<input type="text" id="estado-interno" placeholder="Estado interno del equipo">
+                <label for="comentarios-internos">Comentarios Internos:</label>
+                <textarea id="comentarios-internos" placeholder="Comentarios internos del equipo"></textarea>
+
+                <label for="estado-interno">Estado Interno:</label>
+                <input type="text" id="estado-interno" placeholder="Estado interno del equipo">
 
                 <!-- Campo Estado modificado -->
-<label for="estado">Estado:</label>
-<select id="estado" required>
-    <option value="">Seleccione...</option>
-    <option value="ingresado">Ingresado</option>
-    <option value="cancelado">Cancelado</option>
-    <option value="en-revision">En Revisión</option>
-    <option value="en-reparacion">En Reparación</option>
-    <option value="listo">Listo</option>
-    <option value="sin-reparacion">Sin Reparación</option>
-    <option value="entregado">Entregado</option>
-</select>
-
+                <label for="estado">Estado:</label>
+                <select id="estado" required>
+                    <option value="">Seleccione...</option>
+                    <option value="ingresado">Ingresado</option>
+                    <option value="cancelado">Cancelado</option>
+                    <option value="en-revision">En Revisión</option>
+                    <option value="en-reparacion">En Reparación</option>
+                    <option value="listo">Listo</option>
+                    <option value="sin-reparacion">Sin Reparación</option>
+                    <option value="entregado">Entregado</option>
+                </select>
 
                 <button type="submit">Registrar Equipo</button>
             </form>
@@ -275,13 +275,13 @@
 
             const mensajesTableBody = document.getElementById("datos-mensajes");
             mensajes.forEach(mensaje => {
-                const row = <tr>
+                const row = `<tr>
                     <td>${mensaje.fecha}</td>
                     <td>${mensaje.asunto}</td>
                     <td>${mensaje.emisor}</td>
                     <td>${mensaje.mensaje}</td>
                     <td>${mensaje.codigoIdentificacion}</td>
-                </tr>;
+                </tr>`;
                 mensajesTableBody.innerHTML += row;
             });
         }
@@ -290,3 +290,4 @@
     </script>
 </body>
 </html>
+
