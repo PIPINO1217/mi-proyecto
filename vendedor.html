@@ -34,7 +34,7 @@
 </head>
 <body>
     <header>
-        <h1>Técnico</h1>
+        <h1>VENDEDOR</h1>
         <nav>
             <ul>
                 <li><a class="button" href="index.html">Inicio</a></li>
@@ -67,11 +67,11 @@
                 <label for="codigo">Código de Identificación:</label>
                 <input type="text" id="codigo" value="" readonly>
 
-                <label for="test">Test (Sí/No):</label>
+                <label for="test">Test (SI/NO):</label>
                 <select id="test" required>
                     <option value="">Seleccione...</option>
-                    <option value="si">Sí</option>
-                    <option value="no">No</option>
+                    <option value="SI">SI</option>
+                    <option value="NO">NO</option>
                 </select>
 
                 <label for="fecha-ingreso">Fecha de Ingreso:</label>
@@ -127,13 +127,13 @@
                 <label for="estado">Estado:</label>
                 <select id="estado" required>
                     <option value="">Seleccione...</option>
-                    <option value="ingresado">Ingresado</option>
-                    <option value="cancelado">Cancelado</option>
-                    <option value="en-revision">En Revisión</option>
-                    <option value="en-reparacion">En Reparación</option>
-                    <option value="listo">Listo</option>
-                    <option value="sin-reparacion">Sin Reparación</option>
-                    <option value="entregado">Entregado</option>
+                    <option value="INGRESADO">INGRESADO</option>
+                    <option value="CANCELADO">CANCELADO</option>
+                    <option value="EN-REVISION">EN REVISION</option>
+                    <option value="EN-REPARACION">EN REPARACION</option>
+                    <option value="LISTO">LISTO</option>
+                    <option value="SIN-REPARACION">SIN REPARACION</option>
+                    <option value="ENTREGADO">ENTREGADO</option>
                 </select>
 
                 <button type="submit">Registrar Equipo</button>
@@ -145,11 +145,11 @@
                 <table id="bandeja-entrada">
                     <thead>
                         <tr>
-                            <th>Fecha</th>
-                            <th>Asunto</th>
-                            <th>Emisor</th>
-                            <th>Mensaje</th>
-                            <th>Código Identificación</th>
+                            <th>FECHA</th>
+                            <th>ASUNTO</th>
+                            <th>EMISOR</th>
+                            <th>MENSAJE</th>
+                            <th>CODIGO</th>
                         </tr>
                     </thead>
                     <tbody id="datos-mensajes"></tbody>
@@ -160,17 +160,16 @@
             <table id="base-datos">
                 <thead>
                     <tr>
-                        <th>Nombre y Apellido</th>
-                        <th>Modelo</th>
-                        <th>Marca</th>
-                        <th>Código Identificación</th>
-                        <th>Test</th>
-                        <th>Fecha de Ingreso</th>
-                        <th>Fecha de Retiro</th>
-                        <th>Diagnóstico</th>
-                        <th>Presupuesto</th>
-                        <th>Comentarios</th>
-                        <th>Estado</th>
+                        <th>NOMBRE</th>
+                        <th>MODELO</th>
+                        <th>MARCA</th>
+                        <th>CODIGO</th>
+                        <th>INGRESO</th>
+                        <th>RETIRO</th>
+                        <th>DIAGNOSTICO</th>
+                        <th>PRESUPUESTO</th>
+                        <th>COMENTARIOS</th>
+                        <th>ESTADO</th>
                     </tr>
                 </thead>
                 <tbody id="datos-equipos"></tbody>
@@ -186,7 +185,7 @@
 
         function validateLogin() {
             const password = document.getElementById("password").value;
-            if (password === "1247") {
+            if (password === "3468") {
                 document.getElementById("login-section").style.display = "none";
                 document.getElementById("main-section").style.display = "block";
                 generateCodigo(); // Generar el código al ingresar
@@ -221,7 +220,6 @@
                 modelo,
                 marca,
                 codigo,
-                test,
                 fechaIngreso,
                 fechaRetiro,
                 diagnostico,
@@ -248,7 +246,6 @@
                 <td>${equipo.modelo}</td>
                 <td>${equipo.marca}</td>
                 <td>${equipo.codigo}</td>
-                <td>${equipo.test}</td>
                 <td>${equipo.fechaIngreso}</td>
                 <td>${equipo.fechaRetiro}</td>
                 <td>${equipo.diagnostico}</td>
