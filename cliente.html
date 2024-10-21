@@ -50,17 +50,14 @@
             <table id="resultado-consulta" style="display: none;">
                 <thead>
                     <tr>
-                        <th>Nombre y Apellido</th>
-                        <th>Modelo</th>
-                        <th>Marca</th>
-                        <th>Código Identificación</th>
-                        <th>Test</th>
-                        <th>Fecha de Ingreso</th>
-                        <th>Fecha de Retiro</th>
-                        <th>Diagnóstico</th>
-                        <th>Presupuesto</th>
-                        <th>Comentarios</th>
-                        <th>Estado</th>
+                        <th>NOMBRE</th>
+                        <th>MARCA</th>
+                        <th>MODELO</th>
+                        <th>INGRESO</th>
+                        <th>DIAGNOSTICO INICIAL</th>
+                        <th>PRESUPUESTO</th>
+                        <th>CODIGO</th>
+                        <th>ESTADO</th>
                     </tr>
                 </thead>
                 <tbody id="datos-consulta"></tbody>
@@ -105,15 +102,12 @@
             if (equipo) {
                 const row = `<tr>
                     <td>${equipo.nombreCliente}</td>
-                    <td>${equipo.modelo}</td>
                     <td>${equipo.marca}</td>
-                    <td>${equipo.codigo}</td>
-                    <td>${equipo.test}</td>
+                    <td>${equipo.modelo}</td>
                     <td>${equipo.fechaIngreso}</td>
-                    <td>${equipo.fechaRetiro}</td>
                     <td>${equipo.diagnostico}</td>
                     <td>${equipo.presupuesto}</td>
-                    <td>${equipo.comentarios}</td>
+                    <td>${equipo.codigo}</td>
                     <td>${equipo.estado}</td>
                 </tr>`;
                 datosConsulta.innerHTML = row;
