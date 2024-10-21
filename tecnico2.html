@@ -127,29 +127,29 @@
                 <label for="estado">Estado:</label>
                 <select id="estado" required>
                     <option value="">Seleccione...</option>
-                    <option value="ingresado">Ingresado</option>
-                    <option value="cancelado">Cancelado</option>
-                    <option value="en-revision">En Revisión</option>
-                    <option value="en-reparacion">En Reparación</option>
-                    <option value="listo">Listo</option>
-                    <option value="sin-reparacion">Sin Reparación</option>
-                    <option value="entregado">Entregado</option>
+                    <option value="INGRESADO">INGRESADO</option>
+                    <option value="CANCELADO">CANCELADO</option>
+                    <option value="EN-REVISION">EN REVISION</option>
+                    <option value="EN-REPARACION">EN REPARACION</option>
+                    <option value="LISTO">LISTO</option>
+                    <option value="SIN-REPARACION">SIN REPARACION</option>
+                    <option value="ENTREGADO">ENTREGADO</option>
                 </select>
 
                 <button type="submit">Registrar Equipo</button>
             </form>
 
-            <h2>Bandeja de Entrada</h2>
+            <h2>BANDEJA DE ENTRADA</h2>
             <div class="inbox">
-                <h3>Mensajes Recibidos</h3>
+                <h3>MENSAJES RECIBIDOS</h3>
                 <table id="bandeja-entrada">
                     <thead>
                         <tr>
-                            <th>Fecha</th>
-                            <th>Asunto</th>
-                            <th>Emisor</th>
-                            <th>Mensaje</th>
-                            <th>Código Identificación</th>
+                            <th>FECHA</th>
+                            <th>ASUNTO</th>
+                            <th>EMISOR</th>
+                            <th>MENSAJE</th>
+                            <th>CODIGO</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -157,21 +157,20 @@
                 </table>
             </div>
 
-            <h2>Base de Datos de Equipos</h2>
+                        <h2>EQUIPOS</h2>
             <table id="base-datos">
                 <thead>
                     <tr>
-                        <th>Nombre y Apellido</th>
-                        <th>Modelo</th>
-                        <th>Marca</th>
-                        <th>Código Identificación</th>
-                        <th>Test</th>
-                        <th>Fecha de Ingreso</th>
-                        <th>Fecha de Retiro</th>
-                        <th>Diagnóstico</th>
-                        <th>Presupuesto</th>
-                        <th>Comentarios</th>
-                        <th>Estado</th>
+                        <th>NOMBRE</th>
+                        <th>MARCA</th>
+                        <th>MODELO</th>
+                        <th>CODIGO</th>
+                        <th>INGRESO</th>
+                        <th>RETIRO</th>
+                        <th>DIAGNOSTICO</th>
+                        <th>PRESUPUESTO</th>
+                        <th>COMENTARIOS</th>
+                        <th>ESTADO</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -253,8 +252,8 @@
                 <td>${equipo.comentarios}</td>
                 <td>${equipo.estado}</td>
                 <td>
-                    <button onclick="modificarEquipo(this)">Modificar</button>
-                    <button onclick="borrarEquipo(this)">Borrar</button>
+                    <button onclick="modificarEquipo(this)">MODIFICAR</button>
+                    <button onclick="borrarEquipo(this)">BORRAR</button>
                 </td>
             </tr>`;
             document.getElementById("datos-equipos").innerHTML += row;
@@ -283,8 +282,8 @@
                     <td>${mensaje.mensaje}</td>
                     <td>${mensaje.codigoIdentificacion}</td>
                     <td>
-                        <button onclick="modificarMensaje(this)">Modificar</button>
-                        <button onclick="borrarMensaje(this)">Borrar</button>
+                        <button onclick="modificarMensaje(this)">MODIFICAR</button>
+                        <button onclick="borrarMensaje(this)">BORRAR</button>
                     </td>
                 </tr>`;
                 mensajesTableBody.innerHTML += row;
@@ -298,12 +297,12 @@
             for (let i = 0; i < cells.length - 1; i++) {
                 cells[i].setAttribute("contenteditable", "true");
             }
-            button.innerText = "Guardar";
+            button.innerText = "GUARDAR";
             button.onclick = function() {
                 for (let i = 0; i < cells.length - 1; i++) {
                     cells[i].setAttribute("contenteditable", "false");
                 }
-                button.innerText = "Modificar";
+                button.innerText = "MODIFICAR";
                 button.onclick = modificarEquipo;
             };
         }
@@ -321,12 +320,12 @@
             for (let i = 0; i < cells.length - 1; i++) {
                 cells[i].setAttribute("contenteditable", "true");
             }
-            button.innerText = "Guardar";
+            button.innerText = "GUARDAR";
             button.onclick = function() {
                 for (let i = 0; i < cells.length - 1; i++) {
                     cells[i].setAttribute("contenteditable", "false");
                 }
-                button.innerText = "Modificar";
+                button.innerText = "MODIFICAR";
                 button.onclick = modificarMensaje;
             };
         }
