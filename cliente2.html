@@ -303,17 +303,17 @@ function toggleCheck(button, codigo) {
                     <td>${mensaje.emisor}</td>
                     <td>${mensaje.mensaje}</td>
                     <td>${mensaje.codigoIdentificacion}</td>
-                    <td class="check-column">
-                        <span>${checked}</span>
-                        <button onclick="toggleCheck(this, '${mensaje.codigoIdentificacion}')">Check</button>
-                    </td>
+                      <td class="check-column">
+            <span>${checked}</span> <!-- Aquí se muestra el ✔️ si está guardado en localStorage -->
+            <button onclick="toggleCheckMensaje(this, '${mensaje.codigoIdentificacion}')">Check</button>
+        </td>
                     <td>
                         <button onclick="modificarMensaje(this)">MODIFICAR</button>
                         <button onclick="borrarMensaje(this)">BORRAR</button>
                     </td>
                 </tr>`;
-                mensajesTableBody.innerHTML += row;
-            });
+                    document.getElementById("datos-mensajes").innerHTML += row;
+}
         }
 
         // Funciones Modificar y Borrar
