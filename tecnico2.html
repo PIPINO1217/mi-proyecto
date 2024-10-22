@@ -34,11 +34,11 @@
 </head>
 <body>
     <header>
-        <h1>Técnico</h1>
+        <h1>ENCARGADO</h1>
         <nav>
             <ul>
-                <li><a class="button" href="index.html">Inicio</a></li>
-                <li><a class="button" href="cliente.html">Cliente</a></li>
+                <li><a class="button" href="index.html">INICIO</a></li>
+                <li><a class="button" href="cliente.html">CLIENTE</a></li>
             </ul>
         </nav>
     </header>
@@ -53,7 +53,7 @@
         </div>
 
         <div id="main-section" style="display: none;">
-            <h2>Cargar Equipo</h2>
+            <h2>CARGAR EQUIPO</h2>
             <form id="registro-equipo" onsubmit="return registerEquipment()">
                 <label for="nombre-cliente">Nombre y Apellido:</label>
                 <input type="text" id="nombre-cliente" placeholder="Ingresa nombre y apellido" required>
@@ -67,11 +67,11 @@
                 <label for="codigo">Código de Identificación:</label>
                 <input type="text" id="codigo" value="" readonly>
 
-                <label for="test">Test (Sí/No):</label>
+                <label for="test">Test (SI/NO):</label>
                 <select id="test" required>
                     <option value="">Seleccione...</option>
-                    <option value="si">Sí</option>
-                    <option value="no">No</option>
+                    <option value="SI">SI</option>
+                    <option value="NO">NO</option>
                 </select>
 
                 <label for="fecha-ingreso">Fecha de Ingreso:</label>
@@ -150,7 +150,7 @@
                             <th>EMISOR</th>
                             <th>MENSAJE</th>
                             <th>CODIGO</th>
-                            <th>Acciones</th>
+                            <th>ACCIONES</th>
                         </tr>
                     </thead>
                     <tbody id="datos-mensajes"></tbody>
@@ -171,7 +171,7 @@
                         <th>PRESUPUESTO</th>
                         <th>COMENTARIOS</th>
                         <th>ESTADO</th>
-                        <th>Acciones</th>
+                        <th>ACCIONES</th>
                     </tr>
                 </thead>
                 <tbody id="datos-equipos"></tbody>
@@ -218,11 +218,10 @@
             const estado = document.getElementById("estado").value;
 
             const equipoData = {
-                nombreCliente,
-                modelo,
+               nombreCliente,
                 marca,
+                modelo,
                 codigo,
-                test,
                 fechaIngreso,
                 fechaRetiro,
                 diagnostico,
@@ -241,10 +240,9 @@
         function updateEquiposTable(equipo) {
             const row = `<tr>
                 <td>${equipo.nombreCliente}</td>
-                <td>${equipo.modelo}</td>
                 <td>${equipo.marca}</td>
+                <td>${equipo.modelo}</td>
                 <td>${equipo.codigo}</td>
-                <td>${equipo.test}</td>
                 <td>${equipo.fechaIngreso}</td>
                 <td>${equipo.fechaRetiro}</td>
                 <td>${equipo.diagnostico}</td>
