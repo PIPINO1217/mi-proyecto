@@ -62,7 +62,7 @@
             if (password === "1247") {
                 document.getElementById("login-section").style.display = "none";
                 document.getElementById("main-section").style.display = "block";
-                loadMessages(); // Cargar mensajes al inicio
+                loadMessages();
                 return false;
             } else {
                 alert("Código incorrecto.");
@@ -107,24 +107,24 @@
             localStorage.setItem(`mensaje_${codigoIdentificacion}`, JSON.stringify(mensaje)); // Guardar el mensaje actualizado
         }
 
-        // Ejemplo de añadir un mensaje al localStorage (puedes modificar esto según tus necesidades)
-        function addMessage() {
-            const mensaje = {
-                fecha: new Date().toLocaleDateString(),
-                asunto: "Asunto de ejemplo",
-                emisor: "Emisor de ejemplo",
-                mensaje: "Contenido del mensaje",
-                codigoIdentificacion: Math.floor(10000 + Math.random() * 90000).toString(),
-                check: false // Estado inicial del check
-            };
-            localStorage.setItem(`mensaje_${mensaje.codigoIdentificacion}`, JSON.stringify(mensaje));
-            loadMessages(); // Recargar mensajes
+        // Añadir un mensaje de ejemplo para probar
+        function addSampleMessages() {
+            for (let i = 0; i < 5; i++) {
+                const mensaje = {
+                    fecha: new Date().toLocaleDateString(),
+                    asunto: `Asunto ${i + 1}`,
+                    emisor: `Emisor ${i + 1}`,
+                    mensaje: `Contenido del mensaje ${i + 1}`,
+                    codigoIdentificacion: Math.floor(10000 + Math.random() * 90000).toString(),
+                    check: false // Estado inicial del check
+                };
+                localStorage.setItem(`mensaje_${mensaje.codigoIdentificacion}`, JSON.stringify(mensaje));
+            }
         }
 
         // Cargar mensajes al inicio
         window.onload = function() {
-            // Añadir un mensaje de ejemplo (eliminar esta línea si no es necesario)
-            addMessage();
+            addSampleMessages(); // Añadir mensajes de ejemplo
             loadMessages();
         }
     </script>
