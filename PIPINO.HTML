@@ -251,6 +251,7 @@
                 comentariosInternos,
                 estadoInterno,
                 estado,
+                check: false // Inicializamos el check en false
             };
 
             localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipo));
@@ -291,7 +292,6 @@
             });
         }
 
-        // Funciones para gestionar mensajes
         function loadMessages() {
             const mensajes = Object.keys(localStorage)
                 .filter(key => key.startsWith("mensaje_"))
@@ -374,4 +374,3 @@
     </script>
 </body>
 </html>
-
