@@ -215,6 +215,7 @@
             const presupuesto = document.getElementById("presupuesto").value;
             const comentarios = document.getElementById("comentarios").value;
             const estado = document.getElementById("estado").value;
+            const check = false; // Inicialmente sin check
 
             const equipoData = {
                nombreCliente,
@@ -226,7 +227,8 @@
                 diagnostico,
                 presupuesto,
                 comentarios,
-                estado
+                estado,
+                check
             };
 
             localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
@@ -237,6 +239,7 @@
         }
 
         function updateEquiposTable(equipo) {
+            const checked = equipo.check ? '✔️' : ''; // Mostrar el check si está marcado
             const row = `<tr>
                 <td>${equipo.nombreCliente}</td>
                 <td>${equipo.marca}</td>
@@ -248,7 +251,10 @@
                 <td>${equipo.presupuesto}</td>
                 <td>${equipo.comentarios}</td>
                 <td>${equipo.estado}</td>
-                <td class="check-column"><button onclick="toggleCheck(this)">Check</button></td> <!-- Botón CHECK -->
+                <td class="check-column">
+                    <span>${checked}</span>
+                    <button onclick="toggleCheck(this, '${equipo.codigo}')">Check</button>
+                </td>
                 <td>
                     <button onclick="modificarEquipo(this)">MODIFICAR</button>
                     <button onclick="borrarEquipo(this)">BORRAR</button>
@@ -257,13 +263,22 @@
             document.getElementById("datos-equipos").innerHTML += row;
         }
         
-        function toggleCheck(button) {
+        function toggleCheck(button, codigo) {
             const row = button.parentNode;
-            if (row.innerHTML.includes('✔️')) {
-                row.innerHTML = `<button onclick="toggleCheck(this)">Check</button>`; // Deshacer el check
+            const span = row.querySelector("span");
+            const isChecked = span.innerText === '✔️';
+
+            // Actualizamos el check visualmente
+            if (isChecked) {
+                span.innerText = ''; // Desmarcar
             } else {
-                row.innerHTML = '✔️'; // Aplicar el check
+                span.innerText = '✔️'; // Marcar
             }
+
+            // Actualizamos el estado en el localStorage
+            const equipo = JSON.parse(localStorage.getItem(`equipo_${codigo}`));
+            equipo.check = !isChecked;
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipo));
         }
             
         function loadEquipos() {
@@ -282,13 +297,17 @@
 
             const mensajesTableBody = document.getElementById("datos-mensajes");
             mensajes.forEach(mensaje => {
+                const checked = mensaje.check ? '✔️' : ''; // Mostrar el check si está marcado
                 const row = `<tr>
                     <td>${mensaje.fecha}</td>
                     <td>${mensaje.asunto}</td>
                     <td>${mensaje.emisor}</td>
                     <td>${mensaje.mensaje}</td>
                     <td>${mensaje.codigoIdentificacion}</td>
-                    <td class="check-column"><button onclick="toggleCheck(this)">Check</button></td> <!-- Botón CHECK -->
+                    <td class="check-column">
+                        <span>${checked}</span>
+                        <button onclick="toggleCheck(this, '${mensaje.codigoIdentificacion}')">Check</button>
+                    </td>
                     <td>
                         <button onclick="modificarMensaje(this)">MODIFICAR</button>
                         <button onclick="borrarMensaje(this)">BORRAR</button>
