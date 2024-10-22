@@ -263,7 +263,7 @@
             document.getElementById("datos-equipos").innerHTML += row;
         }
         
-        function toggleCheck(button, codigo) {
+ function toggleCheck(button, codigo) {
             const row = button.parentNode;
             const span = row.querySelector("span");
             const isChecked = span.innerText === '✔️';
@@ -280,6 +280,7 @@
             equipo.check = !isChecked;
             localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipo));
         }
+
             
         function loadEquipos() {
             const equipos = Object.keys(localStorage)
