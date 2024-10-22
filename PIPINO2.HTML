@@ -137,6 +137,7 @@
                 <table id="bandeja-entrada">
                     <thead>
                         <tr>
+                            <th>CHECK</th>
                             <th>FECHA</th>
                             <th>ASUNTO</th>
                             <th>EMISOR</th>
@@ -153,6 +154,7 @@
             <table id="base-datos">
                 <thead>
                     <tr>
+                        <th>CHECK</th>
                         <th>NOMBRE</th>
                         <th>MARCA</th>
                         <th>MODELO</th>
@@ -182,6 +184,7 @@
                 document.getElementById("main-section").style.display = "block";
                 generateCodigo(); // Generar el código al ingresar
                 loadEquipos(); // Cargar equipos al inicio
+                loadMessages(); // Cargar mensajes al inicio
                 return false;
             } else {
                 alert("Código incorrecto.");
@@ -230,6 +233,7 @@
 
         function updateEquiposTable(equipo) {
             const row = `<tr>
+                <td><input type="checkbox"></td>
                 <td>${equipo.nombreCliente}</td>
                 <td>${equipo.marca}</td>
                 <td>${equipo.modelo}</td>
@@ -257,15 +261,38 @@
             equipos.forEach(equipo => updateEquiposTable(equipo));
         }
 
+        function loadMessages() {
+            const mensajes = Object.keys(localStorage)
+                .filter(key => key.startsWith("mensaje_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            const mensajesTableBody = document.getElementById("datos-mensajes");
+            mensajes.forEach(mensaje => {
+                const row = `<tr>
+                    <td><input type="checkbox"></td>
+                    <td>${mensaje.fecha}</td>
+                    <td>${mensaje.asunto}</td>
+                    <td>${mensaje.emisor}</td>
+                    <td>${mensaje.mensaje}</td>
+                    <td>${mensaje.codigoIdentificacion}</td>
+                    <td>
+                        <button onclick="modificarMensaje(this)">MODIFICAR</button>
+                        <button onclick="borrarMensaje(this)">BORRAR</button>
+                    </td>
+                </tr>`;
+                mensajesTableBody.innerHTML += row;
+            });
+        }
+
         function modificarEquipo(button) {
             const row = button.parentNode.parentNode;
             const cells = row.querySelectorAll("td");
-            for (let i = 0; i < cells.length - 1; i++) {
+            for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
                 cells[i].setAttribute("contenteditable", "true");
             }
             button.innerText = "GUARDAR";
             button.onclick = function() {
-                for (let i = 0; i < cells.length - 1; i++) {
+                for (let i = 1; i < cells.length - 1; i++) {
                     cells[i].setAttribute("contenteditable", "false");
                 }
                 button.innerText = "MODIFICAR";
@@ -275,12 +302,35 @@
 
         function borrarEquipo(button) {
             const row = button.parentNode.parentNode;
-            row.remove();
-            const codigoIdentificacion = row.querySelector("td:nth-child(4)").innerText;
+            const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText;
             localStorage.removeItem(`equipo_${codigoIdentificacion}`);
+            row.remove();
         }
 
-        loadEquipos();  // Cargar equipos al inicio
+        function modificarMensaje(button) {
+            const row = button.parentNode.parentNode;
+            const cells = row.querySelectorAll("td");
+            for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
+                cells[i].setAttribute("contenteditable", "true");
+            }
+            button.innerText = "GUARDAR";
+            button.onclick = function() {
+                for (let i = 1; i < cells.length - 1; i++) {
+                    cells[i].setAttribute("contenteditable", "false");
+                }
+                button.innerText = "MODIFICAR";
+                button.onclick = modificarMensaje;
+            };
+        }
+
+        function borrarMensaje(button) {
+            const row = button.parentNode.parentNode;
+            const codigoIdentificacion = row.querySelector("td:nth-child(6)").innerText;
+            localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
+            row.remove();
+        }
+
     </script>
 </body>
 </html>
+
