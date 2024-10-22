@@ -215,6 +215,7 @@
                 marca,
                 modelo,
                 codigo,
+                test,
                 fechaIngreso,
                 fechaRetiro,
                 diagnostico,
@@ -233,7 +234,7 @@
 
         function updateEquiposTable(equipo) {
             const row = `<tr>
-                <td><input type="checkbox"></td>
+                <td><input type="checkbox" id="checkbox_${equipo.codigo}" onchange="toggleCheckbox('equipo_${equipo.codigo}', this.checked)" ${getCheckboxState(`equipo_${equipo.codigo}`)}></td>
                 <td>${equipo.nombreCliente}</td>
                 <td>${equipo.marca}</td>
                 <td>${equipo.modelo}</td>
@@ -252,12 +253,19 @@
             document.getElementById("datos-equipos").innerHTML += row;
         }
 
+        function toggleCheckbox(key, checked) {
+            localStorage.setItem(key, checked);
+        }
+
+        function getCheckboxState(key) {
+            return localStorage.getItem(key) === 'true' ? 'checked' : '';
+        }
+
         function loadEquipos() {
             const equipos = Object.keys(localStorage)
                 .filter(key => key.startsWith("equipo_"))
                 .map(key => JSON.parse(localStorage.getItem(key)));
 
-            const equiposTableBody = document.getElementById("datos-equipos");
             equipos.forEach(equipo => updateEquiposTable(equipo));
         }
 
@@ -266,10 +274,9 @@
                 .filter(key => key.startsWith("mensaje_"))
                 .map(key => JSON.parse(localStorage.getItem(key)));
 
-            const mensajesTableBody = document.getElementById("datos-mensajes");
             mensajes.forEach(mensaje => {
                 const row = `<tr>
-                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox" id="checkbox_${mensaje.codigoIdentificacion}" onchange="toggleCheckbox('mensaje_${mensaje.codigoIdentificacion}', this.checked)" ${getCheckboxState(`mensaje_${mensaje.codigoIdentificacion}`)}></td>
                     <td>${mensaje.fecha}</td>
                     <td>${mensaje.asunto}</td>
                     <td>${mensaje.emisor}</td>
@@ -280,7 +287,7 @@
                         <button onclick="borrarMensaje(this)">BORRAR</button>
                     </td>
                 </tr>`;
-                mensajesTableBody.innerHTML += row;
+                document.getElementById("datos-mensajes").innerHTML += row;
             });
         }
 
@@ -333,4 +340,3 @@
     </script>
 </body>
 </html>
-
