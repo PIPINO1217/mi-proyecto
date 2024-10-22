@@ -118,8 +118,8 @@
             if (password === "1247") {
                 document.getElementById("login-section").style.display = "none";
                 document.getElementById("main-section").style.display = "block";
-                generateCodigo(); 
-                loadEquipos(); 
+                generateCodigo(); // Generar el código al ingresar
+                loadEquipos(); // Cargar equipos al inicio
                 return false;
             } else {
                 alert("Código incorrecto.");
@@ -163,7 +163,7 @@
             updateEquiposTable(equipoData);
             document.getElementById("registro-equipo").reset();
             generateCodigo();
-            return false;
+            return false; 
         }
 
         function updateEquiposTable(equipo) {
