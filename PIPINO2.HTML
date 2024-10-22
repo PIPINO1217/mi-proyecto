@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Técnico - Gestión de Equipos</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
-        /* Estilo para las tablas */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -21,14 +19,8 @@
             background-color: #ff00f3;
             color: white;
         }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .inbox {
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
+        .check-column {
+            text-align: center;
         }
     </style>
 </head>
@@ -37,8 +29,8 @@
         <h1>ENCARGADO</h1>
         <nav>
             <ul>
-                <li><a class="button" href="index.html">INICIO</a></li>
-                <li><a class="button" href="cliente.html">CLIENTE</a></li>
+                <li><a href="index.html">INICIO</a></li>
+                <li><a href="cliente.html">CLIENTE</a></li>
             </ul>
         </nav>
     </header>
@@ -47,7 +39,7 @@
             <h2>Ingreso de Código de Acceso</h2>
             <form onsubmit="return validateLogin()">
                 <label for="password">Código de Acceso:</label>
-                <input type="password" id="password" placeholder="Ingresa tu código" required>
+                <input type="password" id="password" required>
                 <button type="submit">Ingresar</button>
             </form>
         </div>
@@ -67,55 +59,6 @@
                 <label for="codigo">Código de Identificación:</label>
                 <input type="text" id="codigo" value="" readonly>
 
-                <label for="test">Test (SI/NO):</label>
-                <select id="test" required>
-                    <option value="">Seleccione...</option>
-                    <option value="SI">SI</option>
-                    <option value="NO">NO</option>
-                </select>
-
-                <label for="fecha-ingreso">Fecha de Ingreso:</label>
-                <input type="date" id="fecha-ingreso" required>
-
-                <label for="fecha-retiro">Fecha de Retiro Estimada:</label>
-                <input type="date" id="fecha-retiro" required>
-
-                <label for="diagnostico">Diagnóstico:</label>
-                <textarea id="diagnostico" placeholder="Escribe el diagnóstico" required></textarea>
-
-                <label for="presupuesto">Presupuesto:</label>
-                <input type="number" id="presupuesto" placeholder="Ingresa el presupuesto" required>
-
-                <label for="comentarios">Comentarios:</label>
-                <textarea id="comentarios" placeholder="Escribe comentarios adicionales"></textarea>
-
-                <label for="telefono">Teléfono de Contacto:</label>
-                <input type="tel" id="telefono" placeholder="Ingresa el teléfono de contacto" required>
-
-                <label for="comunicacion-cliente">Comunicación con el Cliente:</label>
-                <textarea id="comunicacion-cliente" placeholder="Escribe los detalles de comunicación"></textarea>
-
-                <label for="comunicacion-vendedores">Comunicación con Vendedores:</label>
-                <textarea id="comunicacion-vendedores" placeholder="Escribe los detalles de comunicación"></textarea>
-
-                <label for="cadete">Cadete:</label>
-                <input type="text" id="cadete" placeholder="Ingresa el nombre del cadete">
-
-                <label for="tecnico">Técnico:</label>
-                <input type="text" id="tecnico" placeholder="Ingresa el nombre del técnico responsable">
-
-                <label for="vendedor">Vendedor:</label>
-                <input type="text" id="vendedor" placeholder="Ingresa el nombre del vendedor">
-
-                <label for="ubicacion">Ubicación:</label>
-                <input type="text" id="ubicacion" placeholder="Ingresa la ubicación del equipo">
-
-                <label for="demora">Demora Estimada:</label>
-                <input type="text" id="demora" placeholder="Ingresa la demora estimada">
-
-                <label for="comentarios-internos">Comentarios Internos:</label>
-                <textarea id="comentarios-internos" placeholder="Comentarios internos del equipo"></textarea>
-
                 <label for="estado">Estado:</label>
                 <select id="estado" required>
                     <option value="">Seleccione...</option>
@@ -132,38 +75,28 @@
             </form>
 
             <h2>BANDEJA DE ENTRADA</h2>
-            <div class="inbox">
-                <h3>MENSAJES RECIBIDOS</h3>
-                <table id="bandeja-entrada">
-                    <thead>
-                        <tr>
-                            <th>CHECK</th>
-                            <th>FECHA</th>
-                            <th>ASUNTO</th>
-                            <th>EMISOR</th>
-                            <th>MENSAJE</th>
-                            <th>CODIGO</th>
-                            <th>ACCIONES</th>
-                        </tr>
-                    </thead>
-                    <tbody id="datos-mensajes"></tbody>
-                </table>
-            </div>
+            <table id="bandeja-entrada">
+                <thead>
+                    <tr>
+                        <th>FECHA</th>
+                        <th>ASUNTO</th>
+                        <th>EMISOR</th>
+                        <th>MENSAJE</th>
+                        <th>CODIGO</th>
+                        <th>CHECK</th>
+                    </tr>
+                </thead>
+                <tbody id="datos-mensajes"></tbody>
+            </table>
 
             <h2>EQUIPOS</h2>
             <table id="base-datos">
                 <thead>
                     <tr>
-                        <th>CHECK</th>
                         <th>NOMBRE</th>
                         <th>MARCA</th>
                         <th>MODELO</th>
                         <th>CODIGO</th>
-                        <th>INGRESO</th>
-                        <th>RETIRO</th>
-                        <th>DIAGNOSTICO</th>
-                        <th>PRESUPUESTO</th>
-                        <th>COMENTARIOS</th>
                         <th>ESTADO</th>
                         <th>ACCIONES</th>
                     </tr>
@@ -172,9 +105,6 @@
             </table>
         </div>
     </main>
-    <footer>
-        <p>&copy; 2024 Gestión de Equipos</p>
-    </footer>
 
     <script>
         function validateLogin() {
@@ -183,8 +113,8 @@
                 document.getElementById("login-section").style.display = "none";
                 document.getElementById("main-section").style.display = "block";
                 generateCodigo(); // Generar el código al ingresar
-                loadEquipos(); // Cargar equipos al inicio
                 loadMessages(); // Cargar mensajes al inicio
+                loadEquipos(); // Cargar equipos al inicio
                 return false;
             } else {
                 alert("Código incorrecto.");
@@ -202,12 +132,6 @@
             const modelo = document.getElementById("modelo").value;
             const marca = document.getElementById("marca").value;
             const codigo = document.getElementById("codigo").value; 
-            const test = document.getElementById("test").value;
-            const fechaIngreso = document.getElementById("fecha-ingreso").value;
-            const fechaRetiro = document.getElementById("fecha-retiro").value;
-            const diagnostico = document.getElementById("diagnostico").value;
-            const presupuesto = document.getElementById("presupuesto").value;
-            const comentarios = document.getElementById("comentarios").value;
             const estado = document.getElementById("estado").value;
 
             const equipoData = {
@@ -215,12 +139,6 @@
                 marca,
                 modelo,
                 codigo,
-                test,
-                fechaIngreso,
-                fechaRetiro,
-                diagnostico,
-                presupuesto,
-                comentarios,
                 estado
             };
 
@@ -228,37 +146,21 @@
             updateEquiposTable(equipoData);
             document.getElementById("registro-equipo").reset();
             generateCodigo();
-            alert("Equipo registrado exitosamente!"); // Mensaje de confirmación
             return false; 
         }
 
         function updateEquiposTable(equipo) {
             const row = `<tr>
-                <td><input type="checkbox" id="checkbox_${equipo.codigo}" onchange="toggleCheckbox('equipo_${equipo.codigo}', this.checked)" ${getCheckboxState(`equipo_${equipo.codigo}`)}></td>
                 <td>${equipo.nombreCliente}</td>
                 <td>${equipo.marca}</td>
                 <td>${equipo.modelo}</td>
                 <td>${equipo.codigo}</td>
-                <td>${equipo.fechaIngreso}</td>
-                <td>${equipo.fechaRetiro}</td>
-                <td>${equipo.diagnostico}</td>
-                <td>${equipo.presupuesto}</td>
-                <td>${equipo.comentarios}</td>
                 <td>${equipo.estado}</td>
                 <td>
-                    <button onclick="modificarEquipo(this)">MODIFICAR</button>
                     <button onclick="borrarEquipo(this)">BORRAR</button>
                 </td>
             </tr>`;
             document.getElementById("datos-equipos").innerHTML += row;
-        }
-
-        function toggleCheckbox(key, checked) {
-            localStorage.setItem(key, checked);
-        }
-
-        function getCheckboxState(key) {
-            return localStorage.getItem(key) === 'true' ? 'checked' : '';
         }
 
         function loadEquipos() {
@@ -266,77 +168,75 @@
                 .filter(key => key.startsWith("equipo_"))
                 .map(key => JSON.parse(localStorage.getItem(key)));
 
+            const equiposTableBody = document.getElementById("datos-equipos");
             equipos.forEach(equipo => updateEquiposTable(equipo));
         }
 
         function loadMessages() {
+            const mensajesTableBody = document.getElementById("datos-mensajes");
+            mensajesTableBody.innerHTML = ""; // Limpiar tabla antes de cargar
+
             const mensajes = Object.keys(localStorage)
                 .filter(key => key.startsWith("mensaje_"))
                 .map(key => JSON.parse(localStorage.getItem(key)));
 
             mensajes.forEach(mensaje => {
+                const checked = mensaje.check ? '✔️' : '';
                 const row = `<tr>
-                    <td><input type="checkbox" id="checkbox_${mensaje.codigoIdentificacion}" onchange="toggleCheckbox('mensaje_${mensaje.codigoIdentificacion}', this.checked)" ${getCheckboxState(`mensaje_${mensaje.codigoIdentificacion}`)}></td>
                     <td>${mensaje.fecha}</td>
                     <td>${mensaje.asunto}</td>
                     <td>${mensaje.emisor}</td>
                     <td>${mensaje.mensaje}</td>
                     <td>${mensaje.codigoIdentificacion}</td>
-                    <td>
-                        <button onclick="modificarMensaje(this)">MODIFICAR</button>
-                        <button onclick="borrarMensaje(this)">BORRAR</button>
+                    <td class="check-column">
+                        <span>${checked}</span>
+                        <button onclick="toggleCheckMensaje(this, '${mensaje.codigoIdentificacion}')">Check</button>
                     </td>
                 </tr>`;
-                document.getElementById("datos-mensajes").innerHTML += row;
+                mensajesTableBody.innerHTML += row;
             });
         }
 
-        function modificarEquipo(button) {
-            const row = button.parentNode.parentNode;
-            const cells = row.querySelectorAll("td");
-            for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
-                cells[i].setAttribute("contenteditable", "true");
-            }
-            button.innerText = "GUARDAR";
-            button.onclick = function() {
-                for (let i = 1; i < cells.length - 1; i++) {
-                    cells[i].setAttribute("contenteditable", "false");
-                }
-                button.innerText = "MODIFICAR";
-                button.onclick = modificarEquipo;
-            };
+        function toggleCheckMensaje(button, codigoIdentificacion) {
+            const row = button.parentNode;
+            const span = row.querySelector("span");
+            const isChecked = span.innerText === '✔️';
+
+            span.innerText = isChecked ? '' : '✔️'; // Cambiar visualmente el estado
+
+            const mensaje = JSON.parse(localStorage.getItem(`mensaje_${codigoIdentificacion}`));
+            mensaje.check = !isChecked; // Cambiar el estado del check
+            localStorage.setItem(`mensaje_${codigoIdentificacion}`, JSON.stringify(mensaje)); // Guardar el mensaje actualizado
         }
 
         function borrarEquipo(button) {
             const row = button.parentNode.parentNode;
-            const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText;
+            row.remove();
+            const codigoIdentificacion = row.querySelector("td:nth-child(4)").innerText;
             localStorage.removeItem(`equipo_${codigoIdentificacion}`);
-            row.remove();
         }
 
-        function modificarMensaje(button) {
-            const row = button.parentNode.parentNode;
-            const cells = row.querySelectorAll("td");
-            for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
-                cells[i].setAttribute("contenteditable", "true");
+        // Añadir un mensaje de ejemplo para probar
+        function addSampleMessages() {
+            for (let i = 0; i < 5; i++) {
+                const mensaje = {
+                    fecha: new Date().toLocaleDateString(),
+                    asunto: `Asunto ${i + 1}`,
+                    emisor: `Emisor ${i + 1}`,
+                    mensaje: `Contenido del mensaje ${i + 1}`,
+                    codigoIdentificacion: Math.floor(10000 + Math.random() * 90000).toString(),
+                    check: false // Estado inicial del check
+                };
+                localStorage.setItem(`mensaje_${mensaje.codigoIdentificacion}`, JSON.stringify(mensaje));
             }
-            button.innerText = "GUARDAR";
-            button.onclick = function() {
-                for (let i = 1; i < cells.length - 1; i++) {
-                    cells[i].setAttribute("contenteditable", "false");
-                }
-                button.innerText = "MODIFICAR";
-                button.onclick = modificarMensaje;
-            };
         }
 
-        function borrarMensaje(button) {
-            const row = button.parentNode.parentNode;
-            const codigoIdentificacion = row.querySelector("td:nth-child(6)").innerText;
-            localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
-            row.remove();
+        // Cargar mensajes al inicio
+        window.onload = function() {
+            addSampleMessages(); // Añadir mensajes de ejemplo
+            loadMessages();
         }
-
     </script>
 </body>
 </html>
+
