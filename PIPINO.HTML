@@ -89,7 +89,6 @@
                 <label for="comentarios">Comentarios:</label>
                 <textarea id="comentarios" placeholder="Escribe comentarios adicionales"></textarea>
 
-                <!-- Nuevos campos agregados -->
                 <label for="telefono">Teléfono de Contacto:</label>
                 <input type="tel" id="telefono" placeholder="Ingresa el teléfono de contacto" required>
 
@@ -120,7 +119,6 @@
                 <label for="estado-interno">Estado Interno:</label>
                 <input type="text" id="estado-interno" placeholder="Estado interno del equipo">
 
-                <!-- Campo Estado modificado -->
                 <label for="estado">Estado:</label>
                 <select id="estado" required>
                     <option value="">Seleccione...</option>
@@ -228,7 +226,6 @@
             const estadoInterno = document.getElementById("estado-interno").value;
             const estado = document.getElementById("estado").value;
 
-            // Guardar el equipo en localStorage
             const equipo = {
                 nombreCliente,
                 modelo,
@@ -311,7 +308,7 @@
                 <td>${mensaje.mensaje}</td>
                 <td>${mensaje.codigoIdentificacion}</td>
                 <td class="check-column">
-                    <span>${checked}</span> <!-- Aquí se muestra el ✔️ si está guardado en localStorage -->
+                    <span>${checked}</span>
                     <button onclick="toggleCheckMensaje(this, '${mensaje.codigoIdentificacion}')">Check</button>
                 </td>
                 <td>
