@@ -205,7 +205,7 @@
                     <button onclick="toggleCheck(this, '${equipo.codigo}')">Check</button>
                 </td>
                 <td>
-                    <button onclick="modificarEquipo(this)">Modificar</button>
+                    <button onclick="modificarEquipo(this, '${equipo.codigo}')">Modificar</button>
                     <button onclick="borrarEquipo(this)">Borrar</button>
                 </td>
             </tr>`;
@@ -218,12 +218,12 @@
             const isChecked = span.innerText === '✔️';
 
             // Actualizamos el check visualmente
-            span.innerText = isChecked ? '' : '✔️';  // Cambiar el estado visual
+            span.innerText = isChecked ? '' : '✔️';  // Cambiar el estado del check visual
 
             // Actualizamos el estado en el localStorage
             const equipo = JSON.parse(localStorage.getItem(`equipo_${codigo}`));
             equipo.check = !isChecked; // Cambiar el estado del check
-            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipo)); // Guardar el mensaje con el nuevo estado del check
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipo)); // Guardar el equipo con el nuevo estado del check
         }
 
         function loadEquipos() {
@@ -308,10 +308,21 @@
             loadEquipos(); // Recargar equipos
         }
 
-        function modificarEquipo(button) {
-            // Función de modificación de equipos
+        function modificarEquipo(button, codigo) {
             // Aquí puedes agregar la lógica para modificar un equipo existente
+            const equipo = JSON.parse(localStorage.getItem(`equipo_${codigo}`));
+            document.getElementById("nombre-cliente").value = equipo.nombreCliente;
+            document.getElementById("modelo").value = equipo.modelo;
+            document.getElementById("marca").value = equipo.marca;
+            document.getElementById("test").value = equipo.test;
+            document.getElementById("fecha-ingreso").value = equipo.fechaIngreso;
+            document.getElementById("fecha-retiro").value = equipo.fechaRetiro;
+            document.getElementById("diagnostico").value = equipo.diagnostico;
+            document.getElementById("presupuesto").value = equipo.presupuesto;
+            document.getElementById("comentarios").value = equipo.comentarios;
+            document.getElementById("codigo").value = codigo; // Asignar el código del equipo a modificar
         }
     </script>
 </body>
 </html>
+
