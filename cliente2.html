@@ -303,17 +303,17 @@ function toggleCheck(button, codigo) {
                     <td>${mensaje.emisor}</td>
                     <td>${mensaje.mensaje}</td>
                     <td>${mensaje.codigoIdentificacion}</td>
-                      <td class="check-column">
-            <span>${checked}</span> <!-- Aquí se muestra el ✔️ si está guardado en localStorage -->
-            <button onclick="toggleCheckMensaje(this, '${mensaje.codigoIdentificacion}')">Check</button>
-        </td>
+                    <td class="check-column">
+                        <span>${checked}</span>
+                        <button onclick="toggleCheck(this, '${mensaje.codigoIdentificacion}')">Check</button>
+                    </td>
                     <td>
                         <button onclick="modificarMensaje(this)">MODIFICAR</button>
                         <button onclick="borrarMensaje(this)">BORRAR</button>
                     </td>
                 </tr>`;
-                    document.getElementById("datos-mensajes").innerHTML += row;
-}
+                mensajesTableBody.innerHTML += row;
+            });
         }
 
         // Funciones Modificar y Borrar
@@ -362,41 +362,6 @@ function toggleCheck(button, codigo) {
             const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText;
             localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
         }
-        
-        function toggleCheckMensaje(button, codigoIdentificacion) {
-    const row = button.parentNode;
-    const span = row.querySelector("span");
-    const isChecked = span.innerText === '✔️';
-
-    // Actualizamos el check visualmente
-    span.innerText = isChecked ? '' : '✔️';  // Cambiar el estado visual
-
-    // Actualizamos el estado en el localStorage
-    const mensaje = JSON.parse(localStorage.getItem(`mensaje_${codigoIdentificacion}`));
-    mensaje.check = !isChecked;  // Cambiar el estado del check
-    localStorage.setItem(`mensaje_${codigoIdentificacion}`, JSON.stringify(mensaje));  // Guardar el mensaje con el nuevo estado del check
-}
-        function updateMensajesTable(mensaje) {
-    const checked = mensaje.check ? '✔️' : ''; // Mostrar el check si está marcado
-    const row = `<tr>
-        <td>${mensaje.fecha}</td>
-        <td>${mensaje.asunto}</td>
-        <td>${mensaje.emisor}</td>
-        <td>${mensaje.mensaje}</td>
-        <td>${mensaje.codigoIdentificacion}</td>
-        <td class="check-column">
-            <span>${checked}</span> <!-- Aquí se muestra el ✔️ si está guardado en localStorage -->
-            <button onclick="toggleCheckMensaje(this, '${mensaje.codigoIdentificacion}')">Check</button>
-        </td>
-        <td>
-            <button onclick="modificarMensaje(this)">Modificar</button>
-            <button onclick="borrarMensaje(this)">Borrar</button>
-        </td>
-    </tr>`;
-    document.getElementById("datos-mensajes").innerHTML += row;
-}
-
-
 
         loadMessages(); // Cargar mensajes al inicio
         loadEquipos();  // Cargar equipos al inicio
