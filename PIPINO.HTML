@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Técnico - Gestión de Equipos</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
+        /* Estilo para las tablas */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -19,6 +21,15 @@
             background-color: #ff00f3;
             color: white;
         }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .inbox {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
         .check-column {
             text-align: center;
         }
@@ -27,34 +38,78 @@
 <body>
     <header>
         <h1>ENCARGADO</h1>
+        <nav>
+            <ul>
+                <li><a class="button" href="index.html">INICIO</a></li>
+                <li><a class="button" href="cliente.html">CLIENTE</a></li>
+            </ul>
+        </nav>
     </header>
     <main>
         <div id="login-section">
             <h2>Ingreso de Código de Acceso</h2>
             <form onsubmit="return validateLogin()">
                 <label for="password">Código de Acceso:</label>
-                <input type="password" id="password" required>
+                <input type="password" id="password" placeholder="Ingresa tu código" required>
                 <button type="submit">Ingresar</button>
             </form>
         </div>
 
         <div id="main-section" style="display: none;">
+            <h2>CARGAR EQUIPO</h2>
+            <form id="registro-equipo" onsubmit="return registerEquipment()">
+                <!-- Campos del formulario para cargar equipo -->
+                <label for="nombre-cliente">Nombre y Apellido:</label>
+                <input type="text" id="nombre-cliente" placeholder="Ingresa nombre y apellido" required>
+                <!-- Otros campos -->
+                <button type="submit">Registrar Equipo</button>
+            </form>
+
             <h2>BANDEJA DE ENTRADA</h2>
-            <table id="bandeja-entrada">
+            <div class="inbox">
+                <h3>MENSAJES RECIBIDOS</h3>
+                <table id="bandeja-entrada">
+                    <thead>
+                        <tr>
+                            <th>FECHA</th>
+                            <th>ASUNTO</th>
+                            <th>EMISOR</th>
+                            <th>MENSAJE</th>
+                            <th>CODIGO</th>
+                            <th>CHECK</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="datos-mensajes"></tbody>
+                </table>
+            </div>
+
+            <h2>EQUIPOS</h2>
+            <table id="base-datos">
                 <thead>
                     <tr>
-                        <th>FECHA</th>
-                        <th>ASUNTO</th>
-                        <th>EMISOR</th>
-                        <th>MENSAJE</th>
+                        <th>NOMBRE</th>
+                        <th>MARCA</th>
+                        <th>MODELO</th>
                         <th>CODIGO</th>
+                        <th>TEST</th>
+                        <th>INGRESO</th>
+                        <th>RETIRO</th>
+                        <th>DIAGNOSTICO</th>
+                        <th>PRESUPUESTO</th>
+                        <th>COMENTARIOS</th>
+                        <th>ESTADO</th>
                         <th>CHECK</th>
+                        <th>ACCIONES</th>
                     </tr>
                 </thead>
-                <tbody id="datos-mensajes"></tbody>
+                <tbody id="datos-equipos"></tbody>
             </table>
         </div>
     </main>
+    <footer>
+        <p>&copy; 2024 Gestión de Equipos</p>
+    </footer>
 
     <script>
         function validateLogin() {
@@ -62,7 +117,8 @@
             if (password === "1247") {
                 document.getElementById("login-section").style.display = "none";
                 document.getElementById("main-section").style.display = "block";
-                loadMessages();
+                loadMessages(); // Cargar mensajes al inicio
+                loadEquipos(); // Cargar equipos al inicio
                 return false;
             } else {
                 alert("Código incorrecto.");
@@ -90,6 +146,10 @@
                         <span>${checked}</span>
                         <button onclick="toggleCheckMensaje(this, '${mensaje.codigoIdentificacion}')">Check</button>
                     </td>
+                    <td>
+                        <button onclick="modificarMensaje(this)">Modificar</button>
+                        <button onclick="borrarMensaje(this)">Borrar</button>
+                    </td>
                 </tr>`;
                 mensajesTableBody.innerHTML += row;
             });
@@ -107,26 +167,47 @@
             localStorage.setItem(`mensaje_${codigoIdentificacion}`, JSON.stringify(mensaje)); // Guardar el mensaje actualizado
         }
 
-        // Añadir un mensaje de ejemplo para probar
-        function addSampleMessages() {
-            for (let i = 0; i < 5; i++) {
-                const mensaje = {
-                    fecha: new Date().toLocaleDateString(),
-                    asunto: `Asunto ${i + 1}`,
-                    emisor: `Emisor ${i + 1}`,
-                    mensaje: `Contenido del mensaje ${i + 1}`,
-                    codigoIdentificacion: Math.floor(10000 + Math.random() * 90000).toString(),
-                    check: false // Estado inicial del check
-                };
-                localStorage.setItem(`mensaje_${mensaje.codigoIdentificacion}`, JSON.stringify(mensaje));
-            }
+        function registerEquipment() {
+            // Registro de equipo (código existente)
+            const equipoData = {
+                // Campos de equipo
+            };
+
+            localStorage.setItem(`equipo_${equipoData.codigo}`, JSON.stringify(equipoData));
+            updateEquiposTable(equipoData);
+            document.getElementById("registro-equipo").reset();
+            return false; 
+        }
+
+        function loadEquipos() {
+            const equipos = Object.keys(localStorage)
+                .filter(key => key.startsWith("equipo_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            equipos.forEach(equipo => updateEquiposTable(equipo));
+        }
+
+        function updateEquiposTable(equipo) {
+            // Lógica para actualizar la tabla de equipos (código existente)
+        }
+
+        function modificarMensaje(button) {
+            // Lógica para modificar un mensaje (código existente)
+        }
+
+        function borrarMensaje(button) {
+            const row = button.parentNode.parentNode;
+            row.remove();
+            const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText;
+            localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
         }
 
         // Cargar mensajes al inicio
         window.onload = function() {
-            addSampleMessages(); // Añadir mensajes de ejemplo
             loadMessages();
+            loadEquipos();
         }
     </script>
 </body>
 </html>
+
