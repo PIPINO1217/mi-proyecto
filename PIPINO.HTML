@@ -136,40 +136,26 @@
                 <button type="submit">Registrar Equipo</button>
             </form>
 
-            <h2>Bandeja de Entrada</h2>
-<div class="inbox">
-    <h3>Mensajes Recibidos</h3>
-    <input type="checkbox" id="check-mensajes" onchange="saveCheckboxState()"> Mostrar leídos
-    <table id="bandeja-entrada">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Asunto</th>
-                <th>Emisor</th>
-                <th>Mensaje</th>
-                <th>Código Identificación</th>
-            </tr>
-        </thead>
-        <tbody id="datos-mensajes"></tbody>
-    </table>
-</div>
+            <h2>BANDEJA DE ENTRADA</h2>
+            <div class="inbox">
+                <h3>MENSAJES RECIBIDOS</h3>
+                <table id="bandeja-entrada">
+                    <thead>
+                        <tr>
+                            <th>FECHA</th>
+                            <th>ASUNTO</th>
+                            <th>EMISOR</th>
+                            <th>MENSAJE</th>
+                            <th>CODIGO</th>
+                            <th>CHECK</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="datos-mensajes"></tbody>
+                </table>
+            </div>
 
-<script>
-    // Cargar el estado del checkbox al inicio
-    window.onload = function() {
-        const checkMensajes = document.getElementById("check-mensajes");
-        checkMensajes.checked = localStorage.getItem("checkMensajes") === "true"; // Verifica el estado guardado
-    };
-
-    // Guardar el estado del checkbox
-    function saveCheckboxState() {
-        const checkMensajes = document.getElementById("check-mensajes");
-        localStorage.setItem("checkMensajes", checkMensajes.checked); // Guarda el estado actual
-    }
-</script>
-
-
-                        <h2>EQUIPOS</h2>
+            <h2>EQUIPOS</h2>
             <table id="base-datos">
                 <thead>
                     <tr>
@@ -184,7 +170,7 @@
                         <th>PRESUPUESTO</th>
                         <th>COMENTARIOS</th>
                         <th>ESTADO</th>
-                        <th>CHECK</th> <!-- Nueva columna para el check -->
+                        <th>CHECK</th>
                         <th>ACCIONES</th>
                     </tr>
                 </thead>
@@ -206,6 +192,7 @@
                 document.getElementById("main-section").style.display = "block";
                 generateCodigo(); // Generar el código al ingresar
                 loadEquipos(); // Cargar equipos al inicio
+                loadMessages(); // Cargar mensajes al inicio
                 return false;
             } else {
                 alert("Código incorrecto.");
@@ -229,191 +216,162 @@
             const diagnostico = document.getElementById("diagnostico").value;
             const presupuesto = document.getElementById("presupuesto").value;
             const comentarios = document.getElementById("comentarios").value;
+            const telefono = document.getElementById("telefono").value;
+            const comunicacionCliente = document.getElementById("comunicacion-cliente").value;
+            const comunicacionVendedores = document.getElementById("comunicacion-vendedores").value;
+            const cadete = document.getElementById("cadete").value;
+            const tecnico = document.getElementById("tecnico").value;
+            const vendedor = document.getElementById("vendedor").value;
+            const ubicacion = document.getElementById("ubicacion").value;
+            const demora = document.getElementById("demora").value;
+            const comentariosInternos = document.getElementById("comentarios-internos").value;
+            const estadoInterno = document.getElementById("estado-interno").value;
             const estado = document.getElementById("estado").value;
-            const check = false; // Inicialmente sin check
 
-            const equipoData = {
-               nombreCliente,
-                marca,
+            // Guardar el equipo en localStorage
+            const equipo = {
+                nombreCliente,
                 modelo,
+                marca,
                 codigo,
+                test,
                 fechaIngreso,
                 fechaRetiro,
                 diagnostico,
                 presupuesto,
                 comentarios,
+                telefono,
+                comunicacionCliente,
+                comunicacionVendedores,
+                cadete,
+                tecnico,
+                vendedor,
+                ubicacion,
+                demora,
+                comentariosInternos,
+                estadoInterno,
                 estado,
-                check
             };
 
-            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
-            updateEquiposTable(equipoData);
-            document.getElementById("registro-equipo").reset();
-            generateCodigo();
-            return false; 
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipo));
+            loadEquipos();
+            alert("Equipo registrado correctamente.");
+            return false; // Evitar el envío del formulario
         }
 
-        function updateEquiposTable(equipo) {
-    const checked = equipo.check ? '✔️' : ''; // Mostrar el check si está marcado
-    const row = `<tr>
-        <td>${equipo.nombreCliente}</td>
-        <td>${equipo.modelo}</td>
-        <td>${equipo.marca}</td>
-        <td>${equipo.codigo}</td>
-        <td>${equipo.test}</td>
-        <td>${equipo.fechaIngreso}</td>
-        <td>${equipo.fechaRetiro}</td>
-        <td>${equipo.diagnostico}</td>
-        <td>${equipo.presupuesto}</td>
-        <td>${equipo.comentarios}</td>
-        <td>${equipo.estado}</td>
-        <td class="check-column">
-            <span>${checked}</span> <!-- Aquí se muestra el ✔️ si está guardado en localStorage -->
-            <button onclick="toggleCheck(this, '${equipo.codigo}')">Check</button>
-        </td>
-        <td>
-            <button onclick="modificarEquipo(this)">Modificar</button>
-            <button onclick="borrarEquipo(this)">Borrar</button>
-        </td>
-    </tr>`;
-    document.getElementById("datos-equipos").innerHTML += row;
-}
-        
-function toggleCheck(button, codigo) {
-    const row = button.parentNode;
-    const span = row.querySelector("span");
-    const isChecked = span.innerText === '✔️';
-
-    // Actualizamos el check visualmente
-    span.innerText = isChecked ? '' : '✔️';  // Cambiar el estado visual
-
-    // Actualizamos el estado en el localStorage
-    const equipo = JSON.parse(localStorage.getItem(`equipo_${codigo}`));
-    equipo.check = !isChecked;  // Cambiar el estado del check
-    localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipo));  // Guardar el equipo con el nuevo estado del check
-}
-
-            
         function loadEquipos() {
+            const datosEquipos = document.getElementById("datos-equipos");
+            datosEquipos.innerHTML = ""; // Limpiar tabla antes de cargar
+
             const equipos = Object.keys(localStorage)
                 .filter(key => key.startsWith("equipo_"))
                 .map(key => JSON.parse(localStorage.getItem(key)));
 
-            const equiposTableBody = document.getElementById("datos-equipos");
-            equipos.forEach(equipo => updateEquiposTable(equipo));
+            equipos.forEach(equipo => {
+                const row = `<tr>
+                    <td>${equipo.nombreCliente}</td>
+                    <td>${equipo.marca}</td>
+                    <td>${equipo.modelo}</td>
+                    <td>${equipo.codigo}</td>
+                    <td>${equipo.test}</td>
+                    <td>${equipo.fechaIngreso}</td>
+                    <td>${equipo.fechaRetiro}</td>
+                    <td>${equipo.diagnostico}</td>
+                    <td>${equipo.presupuesto}</td>
+                    <td>${equipo.comentarios}</td>
+                    <td>${equipo.estado}</td>
+                    <td class="check-column"><span>${equipo.check ? '✔️' : ''}</span>
+                        <button onclick="toggleCheckEquipo(this, '${equipo.codigo}')">Check</button></td>
+                    <td>
+                        <button onclick="modificarEquipo(this)">Modificar</button>
+                        <button onclick="borrarEquipo(this)">Borrar</button>
+                    </td>
+                </tr>`;
+                datosEquipos.innerHTML += row;
+            });
         }
 
+        // Funciones para gestionar mensajes
         function loadMessages() {
             const mensajes = Object.keys(localStorage)
                 .filter(key => key.startsWith("mensaje_"))
                 .map(key => JSON.parse(localStorage.getItem(key)));
 
             const mensajesTableBody = document.getElementById("datos-mensajes");
-            mensajes.forEach(mensaje => {
-                const checked = mensaje.check ? '✔️' : ''; // Mostrar el check si está marcado
-                const row = `<tr>
-                    <td>${mensaje.fecha}</td>
-                    <td>${mensaje.asunto}</td>
-                    <td>${mensaje.emisor}</td>
-                    <td>${mensaje.mensaje}</td>
-                    <td>${mensaje.codigoIdentificacion}</td>
-                    <td class="check-column">
-                        <span>${checked}</span>
-                        <button onclick="toggleCheck(this, '${mensaje.codigoIdentificacion}')">Check</button>
-                    </td>
-                    <td>
-                        <button onclick="modificarMensaje(this)">MODIFICAR</button>
-                        <button onclick="borrarMensaje(this)">BORRAR</button>
-                    </td>
-                </tr>`;
-                mensajesTableBody.innerHTML += row;
-            });
+            mensajesTableBody.innerHTML = ""; // Limpiar tabla antes de cargar
+            mensajes.forEach(mensaje => updateMensajesTable(mensaje));
         }
 
-        // Funciones Modificar y Borrar
-        function modificarEquipo(button) {
-            const row = button.parentNode.parentNode;
-            const cells = row.querySelectorAll("td");
-            for (let i = 0; i < cells.length - 1; i++) {
-                cells[i].setAttribute("contenteditable", "true");
-            }
-            button.innerText = "GUARDAR";
-            button.onclick = function() {
-                for (let i = 0; i < cells.length - 1; i++) {
-                    cells[i].setAttribute("contenteditable", "false");
-                }
-                button.innerText = "MODIFICAR";
-                button.onclick = modificarEquipo;
-            };
+        function updateMensajesTable(mensaje) {
+            const checked = mensaje.check ? '✔️' : ''; // Mostrar el check si está marcado
+            const row = `<tr>
+                <td>${mensaje.fecha}</td>
+                <td>${mensaje.asunto}</td>
+                <td>${mensaje.emisor}</td>
+                <td>${mensaje.mensaje}</td>
+                <td>${mensaje.codigoIdentificacion}</td>
+                <td class="check-column">
+                    <span>${checked}</span> <!-- Aquí se muestra el ✔️ si está guardado en localStorage -->
+                    <button onclick="toggleCheckMensaje(this, '${mensaje.codigoIdentificacion}')">Check</button>
+                </td>
+                <td>
+                    <button onclick="modificarMensaje(this)">Modificar</button>
+                    <button onclick="borrarMensaje(this)">Borrar</button>
+                </td>
+            </tr>`;
+            document.getElementById("datos-mensajes").innerHTML += row;
         }
 
-        function borrarEquipo(button) {
-            const row = button.parentNode.parentNode;
-            row.remove();
-            const codigoIdentificacion = row.querySelector("td:nth-child(4)").innerText;
-            localStorage.removeItem(`equipo_${codigoIdentificacion}`);
+        function toggleCheckMensaje(button, codigoIdentificacion) {
+            const row = button.parentNode;
+            const span = row.querySelector("span");
+            const isChecked = span.innerText === '✔️';
+
+            // Actualizamos el check visualmente
+            span.innerText = isChecked ? '' : '✔️';  // Cambiar el estado visual
+
+            // Actualizamos el estado en el localStorage
+            const mensaje = JSON.parse(localStorage.getItem(`mensaje_${codigoIdentificacion}`));
+            mensaje.check = !isChecked;  // Cambiar el estado del check
+            localStorage.setItem(`mensaje_${codigoIdentificacion}`, JSON.stringify(mensaje));  // Guardar el mensaje con el nuevo estado del check
+        }
+
+        function toggleCheckEquipo(button, codigo) {
+            const row = button.parentNode;
+            const span = row.querySelector("span");
+            const isChecked = span.innerText === '✔️';
+
+            // Actualizamos el check visualmente
+            span.innerText = isChecked ? '' : '✔️';  // Cambiar el estado visual
+
+            // Actualizamos el estado en el localStorage
+            const equipo = JSON.parse(localStorage.getItem(`equipo_${codigo}`));
+            equipo.check = !isChecked;  // Cambiar el estado del check
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipo));  // Guardar el equipo con el nuevo estado del check
         }
 
         function modificarMensaje(button) {
-            const row = button.parentNode.parentNode;
-            const cells = row.querySelectorAll("td");
-            for (let i = 0; i < cells.length - 1; i++) {
-                cells[i].setAttribute("contenteditable", "true");
-            }
-            button.innerText = "GUARDAR";
-            button.onclick = function() {
-                for (let i = 0; i < cells.length - 1; i++) {
-                    cells[i].setAttribute("contenteditable", "false");
-                }
-                button.innerText = "MODIFICAR";
-                button.onclick = modificarMensaje;
-            };
+            // Lógica para modificar un mensaje
         }
 
         function borrarMensaje(button) {
             const row = button.parentNode.parentNode;
-            row.remove();
-            const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText;
+            const codigoIdentificacion = row.children[4].innerText;
             localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
+            loadMessages(); // Recargar mensajes
         }
-        
-        function toggleCheckMensaje(button, codigoIdentificacion) {
-    const row = button.parentNode;
-    const span = row.querySelector("span");
-    const isChecked = span.innerText === '✔️';
 
-    // Actualizamos el check visualmente
-    span.innerText = isChecked ? '' : '✔️';  // Cambiar el estado visual
+        function modificarEquipo(button) {
+            // Lógica para modificar un equipo
+        }
 
-    // Actualizamos el estado en el localStorage
-    const mensaje = JSON.parse(localStorage.getItem(`mensaje_${codigoIdentificacion}`));
-    mensaje.check = !isChecked;  // Cambiar el estado del check
-    localStorage.setItem(`mensaje_${codigoIdentificacion}`, JSON.stringify(mensaje));  // Guardar el mensaje con el nuevo estado del check
-}
-        function updateMensajesTable(mensaje) {
-    const checked = mensaje.check ? '✔️' : ''; // Mostrar el check si está marcado
-    const row = `<tr>
-        <td>${mensaje.fecha}</td>
-        <td>${mensaje.asunto}</td>
-        <td>${mensaje.emisor}</td>
-        <td>${mensaje.mensaje}</td>
-        <td>${mensaje.codigoIdentificacion}</td>
-        <td class="check-column">
-            <span>${checked}</span> <!-- Aquí se muestra el ✔️ si está guardado en localStorage -->
-            <button onclick="toggleCheckMensaje(this, '${mensaje.codigoIdentificacion}')">Check</button>
-        </td>
-        <td>
-            <button onclick="modificarMensaje(this)">Modificar</button>
-            <button onclick="borrarMensaje(this)">Borrar</button>
-        </td>
-    </tr>`;
-    document.getElementById("datos-mensajes").innerHTML += row;
-}
-
-
-
-        loadMessages(); // Cargar mensajes al inicio
-        loadEquipos();  // Cargar equipos al inicio
+        function borrarEquipo(button) {
+            const row = button.parentNode.parentNode;
+            const codigo = row.children[3].innerText;
+            localStorage.removeItem(`equipo_${codigo}`);
+            loadEquipos(); // Recargar equipos
+        }
     </script>
 </body>
 </html>
+
