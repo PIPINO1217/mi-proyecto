@@ -167,6 +167,7 @@
                         <th>PRESUPUESTO</th>
                         <th>COMENTARIOS</th>
                         <th>ESTADO</th>
+                        <th>CHECK</th>
                         <th>ACCIONES</th>
                     </tr>
                 </thead>
@@ -214,15 +215,17 @@
 
             const equipoData = {
                 nombreCliente,
-                marca,
                 modelo,
+                marca,
                 codigo,
+                test,
                 fechaIngreso,
                 fechaRetiro,
                 diagnostico,
                 presupuesto,
                 comentarios,
-                estado
+                estado,
+                checked: false // Inicializa el checkbox como no marcado
             };
 
             localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
@@ -233,6 +236,7 @@
         }
 
         function updateEquiposTable(equipo) {
+            const checked = equipo.checked ? 'checked' : '';
             const row = `<tr>
                 <td>${equipo.nombreCliente}</td>
                 <td>${equipo.marca}</td>
@@ -244,6 +248,7 @@
                 <td>${equipo.presupuesto}</td>
                 <td>${equipo.comentarios}</td>
                 <td>${equipo.estado}</td>
+                <td><input type="checkbox" ${checked} onchange="toggleEquipoCheck(this, '${equipo.codigo}')"></td>
                 <td>
                     <button onclick="modificarEquipo(this)">MODIFICAR</button>
                     <button onclick="borrarEquipo(this)">BORRAR</button>
@@ -259,6 +264,12 @@
 
             const equiposTableBody = document.getElementById("datos-equipos");
             equipos.forEach(equipo => updateEquiposTable(equipo));
+        }
+
+        function toggleEquipoCheck(checkbox, codigo) {
+            const equipo = JSON.parse(localStorage.getItem(`equipo_${codigo}`));
+            equipo.checked = checkbox.checked;
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipo));
         }
 
         function loadMessages() {
