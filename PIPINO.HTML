@@ -217,13 +217,11 @@
             const span = row.querySelector("span");
             const isChecked = span.innerText === '✔️';
 
-            // Actualizamos el check visualmente
-            span.innerText = isChecked ? '' : '✔️';
+            span.innerText = isChecked ? '' : '✔️'; // Cambiar visualmente el estado
 
-            // Actualizamos el estado en el localStorage
             const equipo = JSON.parse(localStorage.getItem(`equipo_${codigo}`));
             equipo.check = !isChecked; // Cambiar el estado del check
-            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipo)); // Guardar el equipo con el nuevo estado del check
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipo)); // Guardar el equipo actualizado
         }
 
         function loadEquipos() {
@@ -285,13 +283,11 @@
             const span = row.querySelector("span");
             const isChecked = span.innerText === '✔️';
 
-            // Actualizamos el check visualmente
-            span.innerText = isChecked ? '' : '✔️';
+            span.innerText = isChecked ? '' : '✔️'; // Cambiar visualmente el estado
 
-            // Actualizamos el estado en el localStorage
             const mensaje = JSON.parse(localStorage.getItem(`mensaje_${codigoIdentificacion}`));
             mensaje.check = !isChecked; // Cambiar el estado del check
-            localStorage.setItem(`mensaje_${codigoIdentificacion}`, JSON.stringify(mensaje)); // Guardar el mensaje con el nuevo estado del check
+            localStorage.setItem(`mensaje_${codigoIdentificacion}`, JSON.stringify(mensaje)); // Guardar el mensaje actualizado
         }
 
         function borrarMensaje(button) {
@@ -321,6 +317,13 @@
             document.getElementById("comentarios").value = equipo.comentarios;
             document.getElementById("codigo").value = codigo; // Asignar el código del equipo a modificar
         }
+
+        // Inicia la carga de mensajes y equipos
+        window.onload = function() {
+            loadMessages(); // Cargar mensajes al inicio
+            loadEquipos(); // Cargar equipos al inicio
+        }
     </script>
 </body>
 </html>
+
