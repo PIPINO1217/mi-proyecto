@@ -218,7 +218,7 @@
             const isChecked = span.innerText === '✔️';
 
             // Actualizamos el check visualmente
-            span.innerText = isChecked ? '' : '✔️';  // Cambiar el estado del check visual
+            span.innerText = isChecked ? '' : '✔️';
 
             // Actualizamos el estado en el localStorage
             const equipo = JSON.parse(localStorage.getItem(`equipo_${codigo}`));
@@ -309,7 +309,6 @@
         }
 
         function modificarEquipo(button, codigo) {
-            // Aquí puedes agregar la lógica para modificar un equipo existente
             const equipo = JSON.parse(localStorage.getItem(`equipo_${codigo}`));
             document.getElementById("nombre-cliente").value = equipo.nombreCliente;
             document.getElementById("modelo").value = equipo.modelo;
@@ -325,4 +324,3 @@
     </script>
 </body>
 </html>
-
