@@ -89,7 +89,6 @@
         <div id="main-section" class="hidden">
             <h2>CARGAR EQUIPO</h2>
             <form id="registro-equipo" onsubmit="return registerEquipment()">
-                <!-- Campos del formulario -->
                 <label for="nombre-cliente">Nombre y Apellido:</label>
                 <input type="text" id="nombre-cliente" placeholder="Ingresa nombre y apellido" required>
                 <label for="modelo">Modelo:</label>
@@ -174,11 +173,21 @@
                         <th>MARCA</th>
                         <th>MODELO</th>
                         <th>CODIGO</th>
-                        <th>INGRESO</th>
-                        <th>RETIRO</th>
+                        <th>TEST</th>
+                        <th>FECHA DE INGRESO</th>
+                        <th>FECHA DE RETIRO</th>
                         <th>DIAGNOSTICO</th>
                         <th>PRESUPUESTO</th>
                         <th>COMENTARIOS</th>
+                        <th>TELEFONO</th>
+                        <th>COMUNICACION CLIENTE</th>
+                        <th>COMUNICACION VENDEDORES</th>
+                        <th>CADETE</th>
+                        <th>TÉCNICO</th>
+                        <th>VENDEDOR</th>
+                        <th>UBICACIÓN</th>
+                        <th>DEMORA</th>
+                        <th>COMENTARIOS INTERNOS</th>
                         <th>ESTADO</th>
                         <th>ACCIONES</th>
                     </tr>
@@ -199,14 +208,15 @@
     </div>
 
     <script>
+        document.getElementById("codigo").value = generateCodigo();
+        
         function validateLogin() {
             const password = document.getElementById("password").value;
-            if (password === "1247") {
+            if (password === "1234") {
                 document.getElementById("login-section").classList.add("hidden");
                 document.getElementById("main-section").classList.remove("hidden");
-                generateCodigo();
                 loadEquipos();
-                loadMessages();
+                loadMensajes();
                 return false;
             } else {
                 showModal("Código incorrecto.");
@@ -217,6 +227,7 @@
         function generateCodigo() {
             const codigo = Math.floor(10000 + Math.random() * 90000).toString();
             document.getElementById("codigo").value = codigo;
+            return codigo;
         }
 
         function registerEquipment() {
@@ -230,6 +241,15 @@
             const diagnostico = document.getElementById("diagnostico").value;
             const presupuesto = document.getElementById("presupuesto").value;
             const comentarios = document.getElementById("comentarios").value;
+            const telefono = document.getElementById("telefono").value;
+            const comunicacionCliente = document.getElementById("comunicacion-cliente").value;
+            const comunicacionVendedores = document.getElementById("comunicacion-vendedores").value;
+            const cadete = document.getElementById("cadete").value;
+            const tecnico = document.getElementById("tecnico").value;
+            const vendedor = document.getElementById("vendedor").value;
+            const ubicacion = document.getElementById("ubicacion").value;
+            const demora = document.getElementById("demora").value;
+            const comentariosInternos = document.getElementById("comentarios-internos").value;
             const estado = document.getElementById("estado").value;
 
             // Validación de fechas
@@ -249,6 +269,15 @@
                 diagnostico,
                 presupuesto,
                 comentarios,
+                telefono,
+                comunicacionCliente,
+                comunicacionVendedores,
+                cadete,
+                tecnico,
+                vendedor,
+                ubicacion,
+                demora,
+                comentariosInternos,
                 estado
             };
 
@@ -267,11 +296,21 @@
                 <td>${equipo.marca}</td>
                 <td>${equipo.modelo}</td>
                 <td>${equipo.codigo}</td>
+                <td>${equipo.test}</td>
                 <td>${equipo.fechaIngreso}</td>
                 <td>${equipo.fechaRetiro}</td>
                 <td>${equipo.diagnostico}</td>
                 <td>${equipo.presupuesto}</td>
                 <td>${equipo.comentarios}</td>
+                <td>${equipo.telefono}</td>
+                <td>${equipo.comunicacionCliente}</td>
+                <td>${equipo.comunicacionVendedores}</td>
+                <td>${equipo.cadete}</td>
+                <td>${equipo.tecnico}</td>
+                <td>${equipo.vendedor}</td>
+                <td>${equipo.ubicacion}</td>
+                <td>${equipo.demora}</td>
+                <td>${equipo.comentariosInternos}</td>
                 <td>${equipo.estado}</td>
                 <td>
                     <button onclick="modificarEquipo(this)">MODIFICAR</button>
@@ -279,6 +318,30 @@
                 </td>
             </tr>`;
             document.getElementById("datos-equipos").innerHTML += row;
+        }
+
+        function loadMensajes() {
+            // Simulación de carga de mensajes
+            const mensajes = [
+                { fecha: "2024-10-01", asunto: "Consulta", emisor: "Cliente A", mensaje: "Detalles de la consulta", codigo: "12345" },
+                { fecha: "2024-10-02", asunto: "Seguimiento", emisor: "Cliente B", mensaje: "Estado del equipo", codigo: "67890" }
+            ];
+            mensajes.forEach(mensaje => updateMensajesTable(mensaje));
+        }
+
+        function updateMensajesTable(mensaje) {
+            const row = `<tr>
+                <td><input type="checkbox"></td>
+                <td>${mensaje.fecha}</td>
+                <td>${mensaje.asunto}</td>
+                <td>${mensaje.emisor}</td>
+                <td>${mensaje.mensaje}</td>
+                <td>${mensaje.codigo}</td>
+                <td>
+                    <button onclick="borrarMensaje(this)">BORRAR</button>
+                </td>
+            </tr>`;
+            document.getElementById("datos-mensajes").innerHTML += row;
         }
 
         function toggleCheckbox(key, checked) {
@@ -297,28 +360,6 @@
             equipos.forEach(equipo => updateEquiposTable(equipo));
         }
 
-        function loadMessages() {
-            const mensajes = Object.keys(localStorage)
-                .filter(key => key.startsWith("mensaje_"))
-                .map(key => JSON.parse(localStorage.getItem(key)));
-
-            mensajes.forEach(mensaje => {
-                const row = `<tr>
-                    <td><input type="checkbox" id="checkbox_${mensaje.codigoIdentificacion}" onchange="toggleCheckbox('mensaje_${mensaje.codigoIdentificacion}', this.checked)" ${getCheckboxState(`mensaje_${mensaje.codigoIdentificacion}`)}></td>
-                    <td>${mensaje.fecha}</td>
-                    <td>${mensaje.asunto}</td>
-                    <td>${mensaje.emisor}</td>
-                    <td>${mensaje.mensaje}</td>
-                    <td>${mensaje.codigoIdentificacion}</td>
-                    <td>
-                        <button onclick="modificarMensaje(this)">MODIFICAR</button>
-                        <button onclick="borrarMensaje(this)">BORRAR</button>
-                    </td>
-                </tr>`;
-                document.getElementById("datos-mensajes").innerHTML += row;
-            });
-        }
-
         function showModal(message) {
             document.getElementById("modal-message").innerText = message;
             document.getElementById("modal").style.display = "block";
@@ -331,7 +372,7 @@
         function modificarEquipo(button) {
             const row = button.parentNode.parentNode;
             const cells = row.querySelectorAll("td");
-            for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
+            for (let i = 1; i < cells.length - 1; i++) {
                 cells[i].setAttribute("contenteditable", "true");
             }
             button.innerText = "GUARDAR";
@@ -341,7 +382,6 @@
                 }
                 button.innerText = "MODIFICAR";
                 button.onclick = modificarEquipo;
-                // Aquí puedes agregar lógica para actualizar en localStorage si es necesario
             };
         }
 
@@ -353,30 +393,12 @@
             showModal("Equipo borrado exitosamente!");
         }
 
-        function modificarMensaje(button) {
-            const row = button.parentNode.parentNode;
-            const cells = row.querySelectorAll("td");
-            for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
-                cells[i].setAttribute("contenteditable", "true");
-            }
-            button.innerText = "GUARDAR";
-            button.onclick = function() {
-                for (let i = 1; i < cells.length - 1; i++) {
-                    cells[i].setAttribute("contenteditable", "false");
-                }
-                button.innerText = "MODIFICAR";
-                button.onclick = modificarMensaje;
-            };
-        }
-
         function borrarMensaje(button) {
             const row = button.parentNode.parentNode;
-            const codigoIdentificacion = row.querySelector("td:nth-child(6)").innerText;
-            localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
             row.remove();
             showModal("Mensaje borrado exitosamente!");
         }
-
     </script>
 </body>
 </html>
+
