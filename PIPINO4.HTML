@@ -260,42 +260,46 @@
             return false; 
         }
 
-        function updateEquiposTable(equipo) {
-            const row = `<tr>
-                <td><input type="checkbox" id="checkbox_${equipo.codigo}" onchange="toggleCheckbox('equipo_${equipo.codigo}', this.checked)" ${getCheckboxState(`equipo_${equipo.codigo}`)}></td>
-                <td>${equipo.nombreCliente}</td>
-                <td>${equipo.marca}</td>
-                <td>${equipo.modelo}</td>
-                <td>${equipo.codigo}</td>
-                <td>${equipo.fechaIngreso}</td>
-                <td>${equipo.fechaRetiro}</td>
-                <td>${equipo.diagnostico}</td>
-                <td>${equipo.presupuesto}</td>
-                <td>${equipo.comentarios}</td>
-                <td>${equipo.estado}</td>
-                <td>
-                    <button onclick="modificarEquipo(this)">MODIFICAR</button>
-                    <button onclick="borrarEquipo(this)">BORRAR</button>
-                </td>
-            </tr>`;
-            document.getElementById("datos-equipos").innerHTML += row;
-        }
+function updateEquiposTable(equipo) {
+    if (!equipo) return; // Evitar agregar filas indefinidas
+    const row = `<tr>
+        <td><input type="checkbox" id="checkbox_${equipo.codigo}" onchange="toggleCheckbox('equipo_${equipo.codigo}', this.checked)" ${getCheckboxState(`equipo_${equipo.codigo}`)}></td>
+        <td>${equipo.nombreCliente || 'N/A'}</td>
+        <td>${equipo.marca || 'N/A'}</td>
+        <td>${equipo.modelo || 'N/A'}</td>
+        <td>${equipo.codigo || 'N/A'}</td>
+        <td>${equipo.fechaIngreso || 'N/A'}</td>
+        <td>${equipo.fechaRetiro || 'N/A'}</td>
+        <td>${equipo.diagnostico || 'N/A'}</td>
+        <td>${equipo.presupuesto || 'N/A'}</td>
+        <td>${equipo.comentarios || 'N/A'}</td>
+        <td>${equipo.estado || 'N/A'}</td>
+        <td>
+            <button onclick="modificarEquipo(this)">MODIFICAR</button>
+            <button onclick="borrarEquipo(this)">BORRAR</button>
+        </td>
+    </tr>`;
+    document.getElementById("datos-equipos").innerHTML += row;
+}
 
-        function toggleCheckbox(key, checked) {
-            localStorage.setItem(key, checked);
-        }
+
+function toggleCheckbox(key, checked) {
+    localStorage.setItem(key, checked);
+}
+
 
         function getCheckboxState(key) {
             return localStorage.getItem(key) === 'true' ? 'checked' : '';
         }
 
-        function loadEquipos() {
-            const equipos = Object.keys(localStorage)
-                .filter(key => key.startsWith("equipo_"))
-                .map(key => JSON.parse(localStorage.getItem(key)));
+function loadEquipos() {
+    const equipos = Object.keys(localStorage)
+        .filter(key => key.startsWith("equipo_"))
+        .map(key => JSON.parse(localStorage.getItem(key)))
+        .filter(equipo => equipo); // Filtrar si el equipo es válido
 
-            equipos.forEach(equipo => updateEquiposTable(equipo));
-        }
+    equipos.forEach(equipo => updateEquiposTable(equipo));
+}
 
         function loadMessages() {
             const mensajes = Object.keys(localStorage)
