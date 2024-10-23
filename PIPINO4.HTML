@@ -89,7 +89,6 @@
         <div id="main-section" class="hidden">
             <h2>CARGAR EQUIPO</h2>
             <form id="registro-equipo" onsubmit="return registerEquipment()">
-                <!-- Campos del formulario -->
                 <label for="nombre-cliente">Nombre y Apellido:</label>
                 <input type="text" id="nombre-cliente" placeholder="Ingresa nombre y apellido" required>
                 <label for="modelo">Modelo:</label>
@@ -207,11 +206,10 @@ function validateLogin() {
         generateCodigo();
         loadEquipos();
         loadMessages();
-        return false;
     } else {
         showModal("Código de acceso incorrecto. Intente nuevamente.");
-        return false;
     }
+    return false; // Asegura que el formulario no se envíe
 }
 
         function generateCodigo() {
