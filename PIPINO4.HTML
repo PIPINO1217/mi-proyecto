@@ -89,6 +89,7 @@
         <div id="main-section" class="hidden">
             <h2>CARGAR EQUIPO</h2>
             <form id="registro-equipo" onsubmit="return registerEquipment()">
+                <!-- Campos del formulario -->
                 <label for="nombre-cliente">Nombre y Apellido:</label>
                 <input type="text" id="nombre-cliente" placeholder="Ingresa nombre y apellido" required>
                 <label for="modelo">Modelo:</label>
@@ -198,19 +199,20 @@
     </div>
 
     <script>
-function validateLogin() {
-    const password = document.getElementById("password").value;
-    if (password === "1247") {
-        document.getElementById("login-section").classList.add("hidden");
-        document.getElementById("main-section").classList.remove("hidden");
-        generateCodigo();
-        loadEquipos();
-        loadMessages();
-    } else {
-        showModal("Código de acceso incorrecto. Intente nuevamente.");
-    }
-    return false; // Asegura que el formulario no se envíe
-}
+        function validateLogin() {
+            const password = document.getElementById("password").value;
+            if (password === "1247") {
+                document.getElementById("login-section").classList.add("hidden");
+                document.getElementById("main-section").classList.remove("hidden");
+                generateCodigo();
+                loadEquipos();
+                loadMessages();
+                return false; // Previene el envío del formulario
+            } else {
+                showModal("Código de acceso incorrecto. Intente nuevamente.");
+                return false;
+            }
+        }
 
         function generateCodigo() {
             const codigo = Math.floor(10000 + Math.random() * 90000).toString();
@@ -317,7 +319,6 @@ function validateLogin() {
                 }
                 button.innerText = "MODIFICAR";
                 button.onclick = modificarEquipo;
-                // Aquí puedes agregar lógica para actualizar en localStorage si es necesario
             };
         }
 
@@ -328,31 +329,6 @@ function validateLogin() {
             row.remove();
             showModal("Equipo borrado exitosamente!");
         }
-
-        function modificarMensaje(button) {
-            const row = button.parentNode.parentNode;
-            const cells = row.querySelectorAll("td");
-            for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
-                cells[i].setAttribute("contenteditable", "true");
-            }
-            button.innerText = "GUARDAR";
-            button.onclick = function() {
-                for (let i = 1; i < cells.length - 1; i++) {
-                    cells[i].setAttribute("contenteditable", "false");
-                }
-                button.innerText = "MODIFICAR";
-                button.onclick = modificarMensaje;
-            };
-        }
-
-        function borrarMensaje(button) {
-            const row = button.parentNode.parentNode;
-            const codigoIdentificacion = row.querySelector("td:nth-child(6)").innerText;
-            localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
-            row.remove();
-            showModal("Mensaje borrado exitosamente!");
-        }
-
     </script>
 </body>
 </html>
