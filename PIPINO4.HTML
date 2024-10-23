@@ -205,8 +205,6 @@
                 document.getElementById("login-section").classList.add("hidden");
                 document.getElementById("main-section").classList.remove("hidden");
                 generateCodigo();
-                loadEquipos();
-                loadMessages();
                 return false;
             } else {
                 showModal("Código incorrecto.");
@@ -297,6 +295,28 @@
             equipos.forEach(equipo => updateEquiposTable(equipo));
         }
 
+        function loadMessages() {
+            const mensajes = Object.keys(localStorage)
+                .filter(key => key.startsWith("mensaje_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            mensajes.forEach(mensaje => {
+                const row = `<tr>
+                    <td><input type="checkbox" id="checkbox_${mensaje.codigoIdentificacion}" onchange="toggleCheckbox('mensaje_${mensaje.codigoIdentificacion}', this.checked)" ${getCheckboxState(`mensaje_${mensaje.codigoIdentificacion}`)}></td>
+                    <td>${mensaje.fecha}</td>
+                    <td>${mensaje.asunto}</td>
+                    <td>${mensaje.emisor}</td>
+                    <td>${mensaje.mensaje}</td>
+                    <td>${mensaje.codigoIdentificacion}</td>
+                    <td>
+                        <button onclick="modificarMensaje(this)">MODIFICAR</button>
+                        <button onclick="borrarMensaje(this)">BORRAR</button>
+                    </td>
+                </tr>`;
+                document.getElementById("datos-mensajes").innerHTML += row;
+            });
+        }
+
         function showModal(message) {
             document.getElementById("modal-message").innerText = message;
             document.getElementById("modal").style.display = "block";
@@ -319,6 +339,7 @@
                 }
                 button.innerText = "MODIFICAR";
                 button.onclick = modificarEquipo;
+                // Aquí puedes agregar lógica para actualizar en localStorage si es necesario
             };
         }
 
@@ -329,6 +350,31 @@
             row.remove();
             showModal("Equipo borrado exitosamente!");
         }
+
+        function modificarMensaje(button) {
+            const row = button.parentNode.parentNode;
+            const cells = row.querySelectorAll("td");
+            for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
+                cells[i].setAttribute("contenteditable", "true");
+            }
+            button.innerText = "GUARDAR";
+            button.onclick = function() {
+                for (let i = 1; i < cells.length - 1; i++) {
+                    cells[i].setAttribute("contenteditable", "false");
+                }
+                button.innerText = "MODIFICAR";
+                button.onclick = modificarMensaje;
+            };
+        }
+
+        function borrarMensaje(button) {
+            const row = button.parentNode.parentNode;
+            const codigoIdentificacion = row.querySelector("td:nth-child(6)").innerText;
+            localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
+            row.remove();
+            showModal("Mensaje borrado exitosamente!");
+        }
+
     </script>
 </body>
 </html>
