@@ -230,64 +230,64 @@
             document.getElementById("codigo").value = codigo;
         }
 
-        function registerEquipment() {
-            const nombreCliente = document.getElementById("nombre-cliente").value;
-            const modelo = document.getElementById("modelo").value;
-            const marca = document.getElementById("marca").value;
-            const codigo = document.getElementById("codigo").value; 
-            const test = document.getElementById("test").value;
-            const fechaIngreso = document.getElementById("fecha-ingreso").value;
-            const fechaRetiro = document.getElementById("fecha-retiro").value;
-            const diagnostico = document.getElementById("diagnostico").value;
-            const presupuesto = document.getElementById("presupuesto").value;
-            const comentarios = document.getElementById("comentarios").value;
-            const telefono = document.getElementById("telefono").value;
-            const comunicacionCliente = document.getElementById("comunicacion-cliente").value;
-            const comunicacionVendedores = document.getElementById("comunicacion-vendedores").value;
-            const cadete = document.getElementById("cadete").value;
-            const tecnico = document.getElementById("tecnico").value;
-            const vendedor = document.getElementById("vendedor").value;
-            const ubicacion = document.getElementById("ubicacion").value;
-            const demora = document.getElementById("demora").value;
-            const comentariosInternos = document.getElementById("comentarios-internos").value;
-            const estado = document.getElementById("estado").value;
+function registerEquipment() {
+    const nombreCliente = document.getElementById("nombre-cliente").value;
+    const modelo = document.getElementById("modelo").value;
+    const marca = document.getElementById("marca").value;
+    const codigo = document.getElementById("codigo").value; 
+    const test = document.getElementById("test").value;
+    const fechaIngreso = document.getElementById("fecha-ingreso").value;
+    const fechaRetiro = document.getElementById("fecha-retiro").value;
+    const diagnostico = document.getElementById("diagnostico").value;
+    const presupuesto = document.getElementById("presupuesto").value;
+    const comentarios = document.getElementById("comentarios").value;
+    const telefono = document.getElementById("telefono").value;
+    const comunicacionCliente = document.getElementById("comunicacion-cliente").value;
+    const comunicacionVendedores = document.getElementById("comunicacion-vendedores").value;
+    const cadete = document.getElementById("cadete").value;
+    const tecnico = document.getElementById("tecnico").value;
+    const vendedor = document.getElementById("vendedor").value;
+    const ubicacion = document.getElementById("ubicacion").value;
+    const demora = document.getElementById("demora").value;
+    const comentariosInternos = document.getElementById("comentarios-internos").value;
+    const estado = document.getElementById("estado").value;
 
-            // Validación de fechas
-            if (new Date(fechaIngreso) >= new Date(fechaRetiro)) {
-                showModal("La fecha de retiro debe ser posterior a la fecha de ingreso.");
-                return false;
-            }
+    // Validación de fechas
+    if (new Date(fechaIngreso) >= new Date(fechaRetiro)) {
+        showModal("La fecha de retiro debe ser posterior a la fecha de ingreso.");
+        return false;
+    }
 
-            const equipoData = {
-                nombreCliente,
-                marca,
-                modelo,
-                codigo,
-                test,
-                fechaIngreso,
-                fechaRetiro,
-                diagnostico,
-                presupuesto,
-                comentarios,
-                telefono,
-                comunicacionCliente,
-                comunicacionVendedores,
-                cadete,
-                tecnico,
-                vendedor,
-                ubicacion,
-                demora,
-                comentariosInternos,
-                estado
-            };
+    const equipoData = {
+        nombreCliente,
+        marca,
+        modelo,
+        codigo,
+        test,
+        fechaIngreso,
+        fechaRetiro,
+        diagnostico,
+        presupuesto,
+        comentarios,
+        telefono,
+        comunicacionCliente,
+        comunicacionVendedores,
+        cadete,
+        tecnico,
+        vendedor,
+        ubicacion,
+        demora,
+        comentariosInternos,
+        estado
+    };
 
-            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
-            updateEquiposTable(equipoData);
-            document.getElementById("registro-equipo").reset();
-            generateCodigo();
-            showModal("Equipo registrado exitosamente!");
-            return false; 
-        }
+    localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
+    updateEquiposTable(equipoData);
+    document.getElementById("registro-equipo").reset();
+    generateCodigo();
+    showModal("Equipo registrado exitosamente!");
+    return false; 
+}
 
         function updateEquiposTable(equipo) {
             const row = `<tr>
