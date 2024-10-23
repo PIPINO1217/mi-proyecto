@@ -89,6 +89,7 @@
         <div id="main-section" class="hidden">
             <h2>CARGAR EQUIPO</h2>
             <form id="registro-equipo" onsubmit="return registerEquipment()">
+                <!-- Campos del formulario -->
                 <label for="nombre-cliente">Nombre y Apellido:</label>
                 <input type="text" id="nombre-cliente" placeholder="Ingresa nombre y apellido" required>
                 <label for="modelo">Modelo:</label>
@@ -236,19 +237,21 @@
             return false; 
         }
 
-        function loadEquipos() {
-            const equipos = Object.keys(localStorage)
-                .filter(key => key.startsWith("equipo_"))
-                .map(key => JSON.parse(localStorage.getItem(key)));
+function loadEquipos() {
+    const datosEquipos = document.getElementById("datos-equipos");
+    datosEquipos.innerHTML = ""; // Limpiar la tabla antes de cargar nuevos datos
+    const equipos = Object.keys(localStorage)
+        .filter(key => key.startsWith("equipo_"))
+        .map(key => JSON.parse(localStorage.getItem(key)));
 
-            equipos.forEach(equipo => {
-                updateEquiposTable(equipo);
-            });
-        }
+    equipos.forEach(equipo => {
+        updateEquiposTable(equipo);
+    });
+}
 
         function updateEquiposTable(equipo) {
             const row = `<tr>
-                <td><input type="checkbox" id="checkbox_${equipo.codigo}" ${getCheckboxState('equipo_' + equipo.codigo)}></td>
+                <td><input type="checkbox" id="checkbox_${equipo.codigo}" onchange="toggleCheckbox('equipo_${equipo.codigo}', this.checked)" ${getCheckboxState('equipo_' + equipo.codigo)}></td>
                 <td>${equipo.nombreCliente || "N/A"}</td>
                 <td>${equipo.marca || "N/A"}</td>
                 <td>${equipo.modelo || "N/A"}</td>
@@ -267,26 +270,32 @@
             document.getElementById("datos-equipos").innerHTML += row;
         }
 
-        function loadMessages() {
-            const mensajes = Object.keys(localStorage)
-                .filter(key => key.startsWith("mensaje_"))
-                .map(key => JSON.parse(localStorage.getItem(key)));
+function loadMessages() {
+    const datosMensajes = document.getElementById("datos-mensajes");
+    datosMensajes.innerHTML = ""; // Limpiar la tabla antes de cargar nuevos datos
+    const mensajes = Object.keys(localStorage)
+        .filter(key => key.startsWith("mensaje_"))
+        .map(key => JSON.parse(localStorage.getItem(key)));
 
-            mensajes.forEach(mensaje => {
-                const row = `<tr>
-                    <td><input type="checkbox" id="checkbox_${mensaje.codigoIdentificacion}" ${getCheckboxState('mensaje_' + mensaje.codigoIdentificacion)}></td>
-                    <td>${mensaje.fecha || "N/A"}</td>
-                    <td>${mensaje.asunto || "N/A"}</td>
-                    <td>${mensaje.emisor || "N/A"}</td>
-                    <td>${mensaje.mensaje || "N/A"}</td>
-                    <td>${mensaje.codigoIdentificacion || "N/A"}</td>
-                    <td>
-                        <button onclick="modificarMensaje(this)">MODIFICAR</button>
-                        <button onclick="borrarMensaje(this)">BORRAR</button>
-                    </td>
-                </tr>`;
-                document.getElementById("datos-mensajes").innerHTML += row;
-            });
+    mensajes.forEach(mensaje => {
+        const row = `<tr>
+            <td><input type="checkbox" id="checkbox_${mensaje.codigoIdentificacion}" onchange="toggleCheckbox('mensaje_${mensaje.codigoIdentificacion}', this.checked)" ${getCheckboxState('mensaje_' + mensaje.codigoIdentificacion)}></td>
+            <td>${mensaje.fecha || "N/A"}</td>
+            <td>${mensaje.asunto || "N/A"}</td>
+            <td>${mensaje.emisor || "N/A"}</td>
+            <td>${mensaje.mensaje || "N/A"}</td>
+            <td>${mensaje.codigoIdentificacion || "N/A"}</td>
+            <td>
+                <button onclick="modificarMensaje(this)">MODIFICAR</button>
+                <button onclick="borrarMensaje(this)">BORRAR</button>
+            </td>
+        </tr>`;
+        datosMensajes.innerHTML += row;
+    });
+}
+
+        function toggleCheckbox(id, checked) {
+            localStorage.setItem(id, checked);
         }
 
         function getCheckboxState(id) {
@@ -317,6 +326,10 @@
         function borrarMensaje(button) {
             // Lógica para borrar mensaje
         }
+    </script>
+</body>
+</html>
+
     </script>
 </body>
 </html>
