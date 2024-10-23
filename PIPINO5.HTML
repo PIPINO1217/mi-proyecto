@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Técnico - Gestión de Equipos</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilo para las tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #ff00f3;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .inbox {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .button {
+            background-color: #ff00f3;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #e600b8;
+        }
+        .hidden {
+            display: none;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ENCARGADO</h1>
+        <nav>
+            <ul>
+                <li><a class="button" href="index.html">INICIO</a></li>
+                <li><a class="button" href="cliente.html">CLIENTE</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div id="login-section">
+            <h2>Ingreso de Código de Acceso</h2>
+            <form onsubmit="return validateLogin()">
+                <label for="password">Código de Acceso:</label>
+                <input type="password" id="password" placeholder="Ingresa tu código" required>
+                <button type="submit" class="button">Ingresar</button>
+            </form>
+        </div>
+
+        <div id="main-section" class="hidden">
+            <h2>CARGAR EQUIPO</h2>
+            <form id="registro-equipo" onsubmit="return registerEquipment()">
+                <!-- Campos del formulario -->
+                <label for="nombre-cliente">Nombre y Apellido:</label>
+                <input type="text" id="nombre-cliente" placeholder="Ingresa nombre y apellido" required>
+                <label for="modelo">Modelo:</label>
+                <input type="text" id="modelo" placeholder="Ingresa el modelo del equipo" required>
+                <label for="marca">Marca:</label>
+                <input type="text" id="marca" placeholder="Ingresa la marca del equipo" required>
+                <label for="codigo">Código de Identificación:</label>
+                <input type="text" id="codigo" value="" readonly>
+                <label for="test">Test (SI/NO):</label>
+                <select id="test" required>
+                    <option value="">Seleccione...</option>
+                    <option value="SI">SI</option>
+                    <option value="NO">NO</option>
+                </select>
+                <label for="fecha-ingreso">Fecha de Ingreso:</label>
+                <input type="date" id="fecha-ingreso" required>
+                <label for="fecha-retiro">Fecha de Retiro Estimada:</label>
+                <input type="date" id="fecha-retiro" required>
+                <label for="diagnostico">Diagnóstico:</label>
+                <textarea id="diagnostico" placeholder="Escribe el diagnóstico" required></textarea>
+                <label for="presupuesto">Presupuesto:</label>
+                <input type="number" id="presupuesto" placeholder="Ingresa el presupuesto" required>
+                <label for="comentarios">Comentarios:</label>
+                <textarea id="comentarios" placeholder="Escribe comentarios adicionales"></textarea>
+                <label for="telefono">Teléfono de Contacto:</label>
+                <input type="tel" id="telefono" placeholder="Ingresa el teléfono de contacto" required>
+                <label for="comunicacion-cliente">Comunicación con el Cliente:</label>
+                <textarea id="comunicacion-cliente" placeholder="Escribe los detalles de comunicación"></textarea>
+                <label for="comunicacion-vendedores">Comunicación con Vendedores:</label>
+                <textarea id="comunicacion-vendedores" placeholder="Escribe los detalles de comunicación"></textarea>
+                <label for="cadete">Cadete:</label>
+                <input type="text" id="cadete" placeholder="Ingresa el nombre del cadete">
+                <label for="tecnico">Técnico:</label>
+                <input type="text" id="tecnico" placeholder="Ingresa el nombre del técnico responsable">
+                <label for="vendedor">Vendedor:</label>
+                <input type="text" id="vendedor" placeholder="Ingresa el nombre del vendedor">
+                <label for="ubicacion">Ubicación:</label>
+                <input type="text" id="ubicacion" placeholder="Ingresa la ubicación del equipo">
+                <label for="demora">Demora Estimada:</label>
+                <input type="text" id="demora" placeholder="Ingresa la demora estimada">
+                <label for="comentarios-internos">Comentarios Internos:</label>
+                <textarea id="comentarios-internos" placeholder="Comentarios internos del equipo"></textarea>
+                <label for="estado">Estado:</label>
+                <select id="estado" required>
+                    <option value="">Seleccione...</option>
+                    <option value="INGRESADO">INGRESADO</option>
+                    <option value="CANCELADO">CANCELADO</option>
+                    <option value="EN-REVISION">EN REVISION</option>
+                    <option value="EN-REPARACION">EN REPARACION</option>
+                    <option value="LISTO">LISTO</option>
+                    <option value="SIN-REPARACION">SIN REPARACION</option>
+                    <option value="ENTREGADO">ENTREGADO</option>
+                </select>
+                <button type="submit" class="button">Registrar Equipo</button>
+            </form>
+
+            <h2>BANDEJA DE ENTRADA</h2>
+            <div class="inbox">
+                <h3>MENSAJES RECIBIDOS</h3>
+                <table id="bandeja-entrada">
+                    <thead>
+                        <tr>
+                            <th>CHECK</th>
+                            <th>FECHA</th>
+                            <th>ASUNTO</th>
+                            <th>EMISOR</th>
+                            <th>MENSAJE</th>
+                            <th>CODIGO</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="datos-mensajes"></tbody>
+                </table>
+            </div>
+
+            <h2>EQUIPOS</h2>
+            <table id="base-datos">
+                <thead>
+                    <tr>
+                        <th>CHECK</th>
+                        <th>NOMBRE</th>
+                        <th>MARCA</th>
+                        <th>MODELO</th>
+                        <th>CODIGO</th>
+                        <th>INGRESO</th>
+                        <th>RETIRO</th>
+                        <th>DIAGNOSTICO</th>
+                        <th>PRESUPUESTO</th>
+                        <th>COMENTARIOS</th>
+                        <th>ESTADO</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody id="datos-equipos"></tbody>
+            </table>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Gestión de Equipos</p>
+    </footer>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p id="modal-message"></p>
+        </div>
+    </div>
+
+    <script>
+        function validateLogin() {
+            const password = document.getElementById("password").value;
+            if (password === "1247") {
+                document.getElementById("login-section").classList.add("hidden");
+                document.getElementById("main-section").classList.remove("hidden");
+                generateCodigo();
+                loadEquipos();
+                loadMessages();
+                return false;
+            } else {
+                showModal("Código incorrecto.");
+                return false;
+            }
+        }
+
+        function generateCodigo() {
+            const codigo = Math.floor(Math.random() * 10000);
+            document.getElementById("codigo").value = codigo;
+        }
+
+        function registerEquipment() {
+            const equipo = {
+                nombreCliente: document.getElementById("nombre-cliente").value,
+                modelo: document.getElementById("modelo").value,
+                marca: document.getElementById("marca").value,
+                codigo: document.getElementById("codigo").value,
+                fechaIngreso: document.getElementById("fecha-ingreso").value,
+                fechaRetiro: document.getElementById("fecha-retiro").value,
+                diagnostico: document.getElementById("diagnostico").value,
+                presupuesto: document.getElementById("presupuesto").value,
+                comentarios: document.getElementById("comentarios").value,
+                estado: document.getElementById("estado").value,
+            };
+            localStorage.setItem(`equipo_${equipo.codigo}`, JSON.stringify(equipo));
+            loadEquipos();
+            return false; 
+        }
+
+        function loadEquipos() {
+            const equipos = Object.keys(localStorage)
+                .filter(key => key.startsWith("equipo_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            equipos.forEach(equipo => {
+                updateEquiposTable(equipo);
+            });
+        }
+
+        function updateEquiposTable(equipo) {
+            const row = `<tr>
+                <td><input type="checkbox" id="checkbox_${equipo.codigo}" onchange="toggleCheckbox('equipo_${equipo.codigo}', this.checked)" ${getCheckboxState('equipo_' + equipo.codigo)}></td>
+                <td>${equipo.nombreCliente || "N/A"}</td>
+                <td>${equipo.marca || "N/A"}</td>
+                <td>${equipo.modelo || "N/A"}</td>
+                <td>${equipo.codigo || "N/A"}</td>
+                <td>${equipo.fechaIngreso || "N/A"}</td>
+                <td>${equipo.fechaRetiro || "N/A"}</td>
+                <td>${equipo.diagnostico || "N/A"}</td>
+                <td>${equipo.presupuesto || "N/A"}</td>
+                <td>${equipo.comentarios || "N/A"}</td>
+                <td>${equipo.estado || "N/A"}</td>
+                <td>
+                    <button onclick="modificarEquipo(this)">MODIFICAR</button>
+                    <button onclick="borrarEquipo(this)">BORRAR</button>
+                </td>
+            </tr>`;
+            document.getElementById("datos-equipos").innerHTML += row;
+        }
+
+        function loadMessages() {
+            const mensajes = Object.keys(localStorage)
+                .filter(key => key.startsWith("mensaje_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            mensajes.forEach(mensaje => {
+                const row = `<tr>
+                    <td><input type="checkbox" id="checkbox_${mensaje.codigoIdentificacion}" onchange="toggleCheckbox('mensaje_${mensaje.codigoIdentificacion}', this.checked)" ${getCheckboxState('mensaje_' + mensaje.codigoIdentificacion)}></td>
+                    <td>${mensaje.fecha || "N/A"}</td>
+                    <td>${mensaje.asunto || "N/A"}</td>
+                    <td>${mensaje.emisor || "N/A"}</td>
+                    <td>${mensaje.mensaje || "N/A"}</td>
+                    <td>${mensaje.codigoIdentificacion || "N/A"}</td>
+                    <td>
+                        <button onclick="modificarMensaje(this)">MODIFICAR</button>
+                        <button onclick="borrarMensaje(this)">BORRAR</button>
+                    </td>
+                </tr>`;
+                document.getElementById("datos-mensajes").innerHTML += row;
+            });
+        }
+
+        function toggleCheckbox(id, checked) {
+            localStorage.setItem(id, checked);
+        }
+
+        function getCheckboxState(id) {
+            return localStorage.getItem(id) === 'true' ? 'checked' : '';
+        }
+
+        function showModal(message) {
+            document.getElementById("modal-message").innerText = message;
+            document.getElementById("modal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+        function modificarEquipo(button) {
+            // Lógica para modificar equipo
+        }
+
+        function borrarEquipo(button) {
+            // Lógica para borrar equipo
+        }
+
+        function modificarMensaje(button) {
+            // Lógica para modificar mensaje
+        }
+
+        function borrarMensaje(button) {
+            // Lógica para borrar mensaje
+        }
+    </script>
+</body>
+</html>
