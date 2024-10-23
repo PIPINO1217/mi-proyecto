@@ -200,18 +200,19 @@
 
     <script>
         function validateLogin() {
-    const password = document.getElementById("password").value;
-    if (password === "1247") {
-        document.getElementById("login-section").classList.add("hidden");
-        document.getElementById("main-section").classList.remove("hidden");
-        generateCodigo();
-        loadEquipos();
-        loadMessages();
-    } else {
-        showModal("Código de acceso incorrecto. Intente nuevamente.");
-    }
-    return false; // Asegúrate de que esto esté presente para evitar el envío del formulario
-}
+            const password = document.getElementById("password").value;
+            if (password === "1247") {
+                document.getElementById("login-section").classList.add("hidden");
+                document.getElementById("main-section").classList.remove("hidden");
+                generateCodigo();
+                loadEquipos();
+                loadMessages();
+                return false;
+            } else {
+                showModal("Código incorrecto.");
+                return false;
+            }
+        }
 
         function generateCodigo() {
             const codigo = Math.floor(10000 + Math.random() * 90000).toString();
