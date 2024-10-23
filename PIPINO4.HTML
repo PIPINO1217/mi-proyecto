@@ -205,6 +205,8 @@
                 document.getElementById("login-section").classList.add("hidden");
                 document.getElementById("main-section").classList.remove("hidden");
                 generateCodigo();
+                loadEquipos();
+                loadMessages();
                 return false;
             } else {
                 showModal("Código incorrecto.");
