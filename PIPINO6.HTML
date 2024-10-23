@@ -174,11 +174,21 @@
                         <th>MARCA</th>
                         <th>MODELO</th>
                         <th>CODIGO</th>
+                        <th>TEST</th>
                         <th>INGRESO</th>
                         <th>RETIRO</th>
                         <th>DIAGNOSTICO</th>
                         <th>PRESUPUESTO</th>
                         <th>COMENTARIOS</th>
+                        <th>TELEFONO</th>
+                        <th>COM.CLIENTE</th>
+                        <th>COM.VENDEDOR</th>
+                        <th>CADETE</th>
+                        <th>TECNICO</th>
+                        <th>VENDEDOR</th>
+                        <th>UBICACION</th>
+                        <th>DEMORA</th>
+                        <th>COM.INTERNA</th>
                         <th>ESTADO</th>
                         <th>ACCIONES</th>
                     </tr>
@@ -215,53 +225,92 @@
         }
 
         function generateCodigo() {
-            const codigo = Math.floor(Math.random() * 10000);
+            const codigo = Math.floor(10000 + Math.random() * 90000).toString();
             document.getElementById("codigo").value = codigo;
         }
 
         function registerEquipment() {
-            const equipo = {
-                nombreCliente: document.getElementById("nombre-cliente").value,
-                modelo: document.getElementById("modelo").value,
-                marca: document.getElementById("marca").value,
-                codigo: document.getElementById("codigo").value,
-                fechaIngreso: document.getElementById("fecha-ingreso").value,
-                fechaRetiro: document.getElementById("fecha-retiro").value,
-                diagnostico: document.getElementById("diagnostico").value,
-                presupuesto: document.getElementById("presupuesto").value,
-                comentarios: document.getElementById("comentarios").value,
-                estado: document.getElementById("estado").value,
+            const nombreCliente = document.getElementById("nombre-cliente").value;
+            const modelo = document.getElementById("modelo").value;
+            const marca = document.getElementById("marca").value;
+            const codigo = document.getElementById("codigo").value; 
+            const test = document.getElementById("test").value;
+            const fechaIngreso = document.getElementById("fecha-ingreso").value;
+            const fechaRetiro = document.getElementById("fecha-retiro").value;
+            const diagnostico = document.getElementById("diagnostico").value;
+            const presupuesto = document.getElementById("presupuesto").value;
+            const comentarios = document.getElementById("comentarios").value;
+            const telefono = document.getElementById("telefono").value;
+            const comunicacionCliente = document.getElementById("comunicacion-cliente").value;
+            const comunicacionVendedores = document.getElementById("comunicacion-vendedores").value;
+            const cadete = document.getElementById("cadete").value;
+            const tecnico = document.getElementById("tecnico").value;
+            const vendedor = document.getElementById("vendedor").value;
+            const ubicacion = document.getElementById("ubicacion").value;
+            const demora = document.getElementById("demora").value;
+            const comentariosInternos = document.getElementById("comentarios-internos").value;
+            const estado = document.getElementById("estado").value;
+
+            // Validación de fechas
+            if (new Date(fechaIngreso) >= new Date(fechaRetiro)) {
+                showModal("La fecha de retiro debe ser posterior a la fecha de ingreso.");
+                return false;
+            }
+
+            const equipoData = {
+                nombreCliente,
+                marca,
+                modelo,
+                codigo,
+                test,
+                fechaIngreso,
+                fechaRetiro,
+                diagnostico,
+                presupuesto,
+                comentarios,
+                telefono,
+                comunicacionCliente,
+                comunicacionVendedores,
+                cadete,
+                tecnico,
+                vendedor,
+                ubicacion,
+                demora,
+                comentariosInternos,
+                estado
             };
-            localStorage.setItem(`equipo_${equipo.codigo}`, JSON.stringify(equipo));
-            loadEquipos();
+
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
+            updateEquiposTable(equipoData);
+            document.getElementById("registro-equipo").reset();
+            generateCodigo();
+            showModal("Equipo registrado exitosamente!");
             return false; 
         }
 
-function loadEquipos() {
-    const datosEquipos = document.getElementById("datos-equipos");
-    datosEquipos.innerHTML = ""; // Limpiar la tabla antes de cargar nuevos datos
-    const equipos = Object.keys(localStorage)
-        .filter(key => key.startsWith("equipo_"))
-        .map(key => JSON.parse(localStorage.getItem(key)));
-
-    equipos.forEach(equipo => {
-        updateEquiposTable(equipo);
-    });
-}
-
         function updateEquiposTable(equipo) {
             const row = `<tr>
-                <td><input type="checkbox" id="checkbox_${equipo.codigo}" onchange="toggleCheckbox('equipo_${equipo.codigo}', this.checked)" ${getCheckboxState('equipo_' + equipo.codigo)}></td>
-                <td>${equipo.nombreCliente || "N/A"}</td>
-                <td>${equipo.marca || "N/A"}</td>
-                <td>${equipo.modelo || "N/A"}</td>
-                <td>${equipo.codigo || "N/A"}</td>
-                <td>${equipo.fechaIngreso || "N/A"}</td>
-                <td>${equipo.fechaRetiro || "N/A"}</td>
-                <td>${equipo.diagnostico || "N/A"}</td>
-                <td>${equipo.presupuesto || "N/A"}</td>
-                <td>${equipo.comentarios || "N/A"}</td>
-                <td>${equipo.estado || "N/A"}</td>
+                <td><input type="checkbox" id="checkbox_${equipo.codigo}" onchange="toggleCheckbox('equipo_${equipo.codigo}', this.checked)" ${getCheckboxState(`equipo_${equipo.codigo}`)}></td>
+                <td>${equipo.nombreCliente}</td>
+                <td>${equipo.marca}</td>
+                <td>${equipo.modelo}</td>
+                <td>${equipo.codigo}</td>
+                <td>${test}</td>
+                <td>${equipo.fechaIngreso}</td>
+                <td>${equipo.fechaRetiro}</td>
+                <td>${equipo.diagnostico}</td>
+                <td>${equipo.presupuesto}</td>
+                <td>${equipo.comentarios}</td>
+                <td>${telefono}</td>
+                <td>${comunicacionCliente}</td>
+                <td>${comunicacionVendedores}</td>
+                <td>${cadete}</td>
+                <td>${tecnico}</td>
+                <td>${vendedor}</td>
+                <td>${ubicacion}</td>
+                <td>${demora}</td>
+                <td>${comentariosInternos}</td>
+                <td>${equipo.estado}</td>
                 <td>
                     <button onclick="modificarEquipo(this)">MODIFICAR</button>
                     <button onclick="borrarEquipo(this)">BORRAR</button>
@@ -270,36 +319,42 @@ function loadEquipos() {
             document.getElementById("datos-equipos").innerHTML += row;
         }
 
-function loadMessages() {
-    const datosMensajes = document.getElementById("datos-mensajes");
-    datosMensajes.innerHTML = ""; // Limpiar la tabla antes de cargar nuevos datos
-    const mensajes = Object.keys(localStorage)
-        .filter(key => key.startsWith("mensaje_"))
-        .map(key => JSON.parse(localStorage.getItem(key)));
-
-    mensajes.forEach(mensaje => {
-        const row = `<tr>
-            <td><input type="checkbox" id="checkbox_${mensaje.codigoIdentificacion}" onchange="toggleCheckbox('mensaje_${mensaje.codigoIdentificacion}', this.checked)" ${getCheckboxState('mensaje_' + mensaje.codigoIdentificacion)}></td>
-            <td>${mensaje.fecha || "N/A"}</td>
-            <td>${mensaje.asunto || "N/A"}</td>
-            <td>${mensaje.emisor || "N/A"}</td>
-            <td>${mensaje.mensaje || "N/A"}</td>
-            <td>${mensaje.codigoIdentificacion || "N/A"}</td>
-            <td>
-                <button onclick="modificarMensaje(this)">MODIFICAR</button>
-                <button onclick="borrarMensaje(this)">BORRAR</button>
-            </td>
-        </tr>`;
-        datosMensajes.innerHTML += row;
-    });
-}
-
-        function toggleCheckbox(id, checked) {
-            localStorage.setItem(id, checked);
+        function toggleCheckbox(key, checked) {
+            localStorage.setItem(key, checked);
         }
 
-        function getCheckboxState(id) {
-            return localStorage.getItem(id) === 'true' ? 'checked' : '';
+        function getCheckboxState(key) {
+            return localStorage.getItem(key) === 'true' ? 'checked' : '';
+        }
+
+        function loadEquipos() {
+            const equipos = Object.keys(localStorage)
+                .filter(key => key.startsWith("equipo_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            equipos.forEach(equipo => updateEquiposTable(equipo));
+        }
+
+        function loadMessages() {
+            const mensajes = Object.keys(localStorage)
+                .filter(key => key.startsWith("mensaje_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            mensajes.forEach(mensaje => {
+                const row = `<tr>
+                    <td><input type="checkbox" id="checkbox_${mensaje.codigoIdentificacion}" onchange="toggleCheckbox('mensaje_${mensaje.codigoIdentificacion}', this.checked)" ${getCheckboxState(`mensaje_${mensaje.codigoIdentificacion}`)}></td>
+                    <td>${mensaje.fecha}</td>
+                    <td>${mensaje.asunto}</td>
+                    <td>${mensaje.emisor}</td>
+                    <td>${mensaje.mensaje}</td>
+                    <td>${mensaje.codigoIdentificacion}</td>
+                    <td>
+                        <button onclick="modificarMensaje(this)">MODIFICAR</button>
+                        <button onclick="borrarMensaje(this)">BORRAR</button>
+                    </td>
+                </tr>`;
+                document.getElementById("datos-mensajes").innerHTML += row;
+            });
         }
 
         function showModal(message) {
@@ -312,23 +367,53 @@ function loadMessages() {
         }
 
         function modificarEquipo(button) {
-            // Lógica para modificar equipo
+            const row = button.parentNode.parentNode;
+            const cells = row.querySelectorAll("td");
+            for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
+                cells[i].setAttribute("contenteditable", "true");
+            }
+            button.innerText = "GUARDAR";
+            button.onclick = function() {
+                for (let i = 1; i < cells.length - 1; i++) {
+                    cells[i].setAttribute("contenteditable", "false");
+                }
+                button.innerText = "MODIFICAR";
+                button.onclick = modificarEquipo;
+                // Aquí puedes agregar lógica para actualizar en localStorage si es necesario
+            };
         }
 
         function borrarEquipo(button) {
-            // Lógica para borrar equipo
+            const row = button.parentNode.parentNode;
+            const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText;
+            localStorage.removeItem(`equipo_${codigoIdentificacion}`);
+            row.remove();
+            showModal("Equipo borrado exitosamente!");
         }
 
         function modificarMensaje(button) {
-            // Lógica para modificar mensaje
+            const row = button.parentNode.parentNode;
+            const cells = row.querySelectorAll("td");
+            for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
+                cells[i].setAttribute("contenteditable", "true");
+            }
+            button.innerText = "GUARDAR";
+            button.onclick = function() {
+                for (let i = 1; i < cells.length - 1; i++) {
+                    cells[i].setAttribute("contenteditable", "false");
+                }
+                button.innerText = "MODIFICAR";
+                button.onclick = modificarMensaje;
+            };
         }
 
         function borrarMensaje(button) {
-            // Lógica para borrar mensaje
+            const row = button.parentNode.parentNode;
+            const codigoIdentificacion = row.querySelector("td:nth-child(6)").innerText;
+            localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
+            row.remove();
+            showModal("Mensaje borrado exitosamente!");
         }
-    </script>
-</body>
-</html>
 
     </script>
 </body>
