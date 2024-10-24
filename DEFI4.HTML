@@ -334,30 +334,27 @@
             equipos.forEach(equipo => updateEquiposTable(equipo));
         }
 
-function loadMessages() {
-    const mensajesTableBody = document.getElementById("datos-mensajes");
-    mensajesTableBody.innerHTML = ""; // Limpiar la tabla antes de cargar los mensajes
-    const mensajes = Object.keys(localStorage)
-        .filter(key => key.startsWith("mensaje_"))
-        .map(key => JSON.parse(localStorage.getItem(key)));
+        function loadMessages() {
+            const mensajes = Object.keys(localStorage)
+                .filter(key => key.startsWith("mensaje_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
 
-    mensajes.forEach(mensaje => {
-        const row = `<tr>
-            <td><input type="checkbox" id="checkbox_${mensaje.codigoIdentificacion}" onchange="toggleCheckbox('mensaje_${mensaje.codigoIdentificacion}', this.checked)" ${getCheckboxState(`mensaje_${mensaje.codigoIdentificacion}`)}></td>
-            <td>${mensaje.fecha}</td>
-            <td>${mensaje.asunto}</td>
-            <td>${mensaje.emisor}</td>
-            <td>${mensaje.mensaje}</td>
-            <td>${mensaje.codigoIdentificacion}</td>
-            <td>
-                <button onclick="modificarMensaje(this)">MODIFICAR</button>
-                <button onclick="borrarMensaje(this)">BORRAR</button>
-            </td>
-        </tr>`;
-        mensajesTableBody.innerHTML += row;
-    });
-}
-
+            mensajes.forEach(mensaje => {
+                const row = `<tr>
+                    <td><input type="checkbox" id="checkbox_${mensaje.codigoIdentificacion}" onchange="toggleCheckbox('mensaje_${mensaje.codigoIdentificacion}', this.checked)" ${getCheckboxState(`mensaje_${mensaje.codigoIdentificacion}`)}></td>
+                    <td>${mensaje.fecha}</td>
+                    <td>${mensaje.asunto}</td>
+                    <td>${mensaje.emisor}</td>
+                    <td>${mensaje.mensaje}</td>
+                    <td>${mensaje.codigoIdentificacion}</td>
+                    <td>
+                        <button onclick="modificarMensaje(this)">MODIFICAR</button>
+                        <button onclick="borrarMensaje(this)">BORRAR</button>
+                    </td>
+                </tr>`;
+                document.getElementById("datos-mensajes").innerHTML += row;
+            });
+        }
 
         function showModal(message) {
             document.getElementById("modal-message").innerText = message;
@@ -477,9 +474,11 @@ function borrarEquipo(button) {
     }
 
     // Función para borrar mensaje y eliminar de localStorage
-function borrarMensaje(button) {
-    const row = button.parentNode.parentNode;
-    const codigoIdentificacion = row.querySelector("td:nth-child(6)").innerText;
+        function borrarMensaje(codigo) {
+            if (confirm("¿Estás seguro de que quieres borrar este mensaje?")) {
+                localStorage.removeItem(`mensaje_${codigo}`); // Eliminar del localStorage
+                loadMessages(); // Recargar mensajes
+            }};
     // Eliminar del localStorage
     localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
     // Eliminar la fila de la tabla
