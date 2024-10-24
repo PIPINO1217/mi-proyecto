@@ -208,108 +208,32 @@
     </div>
 
     <script>
-        // Código para mostrar y ocultar la ventana modal
-        function showModal(message) {
-            const modal = document.getElementById("modal");
-            const modalMessage = document.getElementById("modal-message");
-            modalMessage.innerText = message;
-            modal.style.display = "block";
-        }
-
-        function closeModal() {
-            document.getElementById("modal").style.display = "none";
-        }
-
-        // Código de login
         function validateLogin() {
             const password = document.getElementById("password").value;
-            if (password === "12345") {
+            if (password === "1247") {
                 document.getElementById("login-section").classList.add("hidden");
                 document.getElementById("main-section").classList.remove("hidden");
+                generateCodigo();
+                loadEquipos();
+                loadMessages();
+                return false;
             } else {
-                showModal("Código de acceso incorrecto.");
+                showModal("Código incorrecto.");
+                return false;
             }
-            return false;
         }
 
-        // Cargar mensajes de localStorage
-        function loadMessages() {
-            const mensajes = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith("mensaje_")) {
-                    mensajes.push(JSON.parse(localStorage.getItem(key)));
-                }
-            }
-            const tbody = document.getElementById("datos-mensajes");
-            tbody.innerHTML = "";
-            mensajes.forEach(mensaje => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td><input type="checkbox"></td>
-                    <td>${mensaje.fecha}</td>
-                    <td>${mensaje.asunto}</td>
-                    <td>${mensaje.emisor}</td>
-                    <td>${mensaje.mensaje}</td>
-                    <td>${mensaje.codigo}</td>
-                    <td>
-                        <button class="button" onclick="modificarMensaje(this)">MODIFICAR</button>
-                        <button class="button" onclick="borrarMensaje(this)">BORRAR</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
+        function generateCodigo() {
+            const codigo = Math.floor(10000 + Math.random() * 90000).toString();
+            document.getElementById("codigo").value = codigo;
         }
 
-        // Cargar equipos de localStorage
-        function loadEquipos() {
-            const equipos = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith("equipo_")) {
-                    equipos.push(JSON.parse(localStorage.getItem(key)));
-                }
-            }
-            const tbody = document.getElementById("datos-equipos");
-            tbody.innerHTML = "";
-            equipos.forEach(equipo => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td><input type="checkbox"></td>
-                    <td>${equipo.nombreCliente}</td>
-                    <td>${equipo.marca}</td>
-                    <td>${equipo.modelo}</td>
-                    <td>${equipo.codigo}</td>
-                    <td>${equipo.fechaIngreso}</td>
-                    <td>${equipo.fechaRetiro}</td>
-                    <td>${equipo.diagnostico}</td>
-                    <td>${equipo.presupuesto}</td>
-                    <td>${equipo.comentarios}</td>
-                    <td>${equipo.telefono}</td>
-                    <td>${equipo.comunicacionCliente}</td>
-                    <td>${equipo.comunicacionVendedores}</td>
-                    <td>${equipo.cadete}</td>
-                    <td>${equipo.tecnico}</td>
-                    <td>${equipo.vendedor}</td>
-                    <td>${equipo.ubicacion}</td>
-                    <td>${equipo.demora}</td>
-                    <td>${equipo.comentariosInternos}</td>
-                    <td>${equipo.estado}</td>
-                    <td>
-                        <button class="button" onclick="modificarEquipo(this)">MODIFICAR</button>
-                        <button class="button" onclick="borrarEquipo(this)">BORRAR</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        // Registro de equipo en localStorage
         function registerEquipment() {
             const nombreCliente = document.getElementById("nombre-cliente").value;
-            const marca = document.getElementById("marca").value;
             const modelo = document.getElementById("modelo").value;
-            const codigo = new Date().getTime(); // Código único basado en el timestamp
+            const marca = document.getElementById("marca").value;
+            const codigo = document.getElementById("codigo").value; 
+            const test = document.getElementById("test").value;
             const fechaIngreso = document.getElementById("fecha-ingreso").value;
             const fechaRetiro = document.getElementById("fecha-retiro").value;
             const diagnostico = document.getElementById("diagnostico").value;
@@ -326,11 +250,18 @@
             const comentariosInternos = document.getElementById("comentarios-internos").value;
             const estado = document.getElementById("estado").value;
 
-            const equipo = {
+            // Validación de fechas
+            if (new Date(fechaIngreso) >= new Date(fechaRetiro)) {
+                showModal("La fecha de retiro debe ser posterior a la fecha de ingreso.");
+                return false;
+            }
+
+            const equipoData = {
                 nombreCliente,
                 marca,
                 modelo,
                 codigo,
+                test,
                 fechaIngreso,
                 fechaRetiro,
                 diagnostico,
@@ -348,118 +279,212 @@
                 estado
             };
 
-            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipo));
-
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
+            updateEquiposTable(equipoData);
+            document.getElementById("registro-equipo").reset();
+            generateCodigo();
             showModal("Equipo registrado exitosamente!");
-            loadEquipos();
-
-            return false;
+            return false; 
         }
 
-        // Función para modificar equipos
-        function modificarEquipo(button) {
-            const row = button.parentNode.parentNode;
-            const cells = row.querySelectorAll("td");
-            const codigo = cells[4].innerText; // Código es la columna 5
-            const equipoData = JSON.parse(localStorage.getItem(`equipo_${codigo}`));
+        function updateEquiposTable(equipo) {
+            const row = `<tr>
+                <td><input type="checkbox" id="checkbox_${equipo.codigo}" onchange="toggleCheckbox('equipo_${equipo.codigo}', this.checked)" ${getCheckboxState(`equipo_${equipo.codigo}`)}></td>
+                <td>${equipo.nombreCliente}</td>
+                <td>${equipo.marca}</td>
+                <td>${equipo.modelo}</td>
+                <td>${equipo.codigo}</td>
+                <td>${equipo.test}</td>
+                <td>${equipo.fechaIngreso}</td>
+                <td>${equipo.fechaRetiro}</td>
+                <td>${equipo.diagnostico}</td>
+                <td>${equipo.presupuesto}</td>
+                <td>${equipo.comentarios}</td>
+                <td>${equipo.telefono}</td>
+                <td>${equipo.comunicacionCliente}</td>
+                <td>${equipo.comunicacionVendedores}</td>
+                <td>${equipo.cadete}</td>
+                <td>${equipo.tecnico}</td>
+                <td>${equipo.vendedor}</td>
+                <td>${equipo.ubicacion}</td>
+                <td>${equipo.demora}</td>
+                <td>${equipo.comentariosInternos}</td>
+                <td>${equipo.estado}</td>
+                <td>
+                    <button onclick="modificarEquipo(this)">MODIFICAR</button>
+                    <button onclick="borrarEquipo(this)">BORRAR</button>
+                </td>
+            </tr>`;
+            document.getElementById("datos-equipos").innerHTML += row;
+        }
 
-            // Hacer todas las celdas editables
+        function toggleCheckbox(key, checked) {
+            localStorage.setItem(key, checked);
+        }
+
+        function getCheckboxState(key) {
+            return localStorage.getItem(key) === 'true' ? 'checked' : '';
+        }
+
+        function loadEquipos() {
+            const equipos = Object.keys(localStorage)
+                .filter(key => key.startsWith("equipo_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            equipos.forEach(equipo => updateEquiposTable(equipo));
+        }
+
+        function loadMessages() {
+            const mensajes = Object.keys(localStorage)
+                .filter(key => key.startsWith("mensaje_"))
+                .map(key => JSON.parse(localStorage.getItem(key)));
+
+            mensajes.forEach(mensaje => {
+                const row = `<tr>
+                    <td><input type="checkbox" id="checkbox_${mensaje.codigoIdentificacion}" onchange="toggleCheckbox('mensaje_${mensaje.codigoIdentificacion}', this.checked)" ${getCheckboxState(`mensaje_${mensaje.codigoIdentificacion}`)}></td>
+                    <td>${mensaje.fecha}</td>
+                    <td>${mensaje.asunto}</td>
+                    <td>${mensaje.emisor}</td>
+                    <td>${mensaje.mensaje}</td>
+                    <td>${mensaje.codigoIdentificacion}</td>
+                    <td>
+                        <button onclick="modificarMensaje(this)">MODIFICAR</button>
+                        <button onclick="borrarMensaje(this)">BORRAR</button>
+                    </td>
+                </tr>`;
+                document.getElementById("datos-mensajes").innerHTML += row;
+            });
+        }
+
+        function showModal(message) {
+            document.getElementById("modal-message").innerText = message;
+            document.getElementById("modal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+<script>
+    // Función para modificar equipo y persistir los cambios en localStorage
+    function modificarEquipo(button) {
+        const row = button.parentNode.parentNode;  // Fila del equipo seleccionado
+        const cells = row.querySelectorAll("td");
+
+        // Habilitar edición de las celdas
+        for (let i = 1; i < cells.length - 1; i++) {
+            cells[i].setAttribute("contenteditable", "true");
+        }
+
+        // Cambiar el botón a "Guardar"
+        button.innerText = "GUARDAR";
+        button.onclick = function () {
+            // Deshabilitar edición de las celdas
             for (let i = 1; i < cells.length - 1; i++) {
-                cells[i].setAttribute("contenteditable", "true");
+                cells[i].setAttribute("contenteditable", "false");
             }
 
-            // Cambiar botón a "GUARDAR"
-            button.innerText = "GUARDAR";
-            button.onclick = function() {
-                for (let i = 1; i < cells.length - 1; i++) {
-                    cells[i].setAttribute("contenteditable", "false");
-                }
-
-                // Actualizar los datos en localStorage
-                equipoData.nombreCliente = cells[1].innerText;
-                equipoData.marca = cells[2].innerText;
-                equipoData.modelo = cells[3].innerText;
-                equipoData.fechaIngreso = cells[5].innerText;
-                equipoData.fechaRetiro = cells[6].innerText;
-                equipoData.diagnostico = cells[7].innerText;
-                equipoData.presupuesto = cells[8].innerText;
-                equipoData.comentarios = cells[9].innerText;
-                equipoData.telefono = cells[10].innerText;
-                equipoData.comunicacionCliente = cells[11].innerText;
-                equipoData.comunicacionVendedores = cells[12].innerText;
-                equipoData.cadete = cells[13].innerText;
-                equipoData.tecnico = cells[14].innerText;
-                equipoData.vendedor = cells[15].innerText;
-                equipoData.ubicacion = cells[16].innerText;
-                equipoData.demora = cells[17].innerText;
-                equipoData.comentariosInternos = cells[18].innerText;
-                equipoData.estado = cells[19].innerText;
-
-                localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
-
-                button.innerText = "MODIFICAR";
-                button.onclick = modificarEquipo;
-
-                showModal("Equipo modificado exitosamente!");
+            // Actualizar los datos en localStorage
+            const codigo = cells[4].innerText;  // Código de identificación
+            const equipoData = {
+                nombreCliente: cells[1].innerText,
+                marca: cells[2].innerText,
+                modelo: cells[3].innerText,
+                codigo: cells[4].innerText,
+                test: cells[5].innerText,
+                fechaIngreso: cells[6].innerText,
+                fechaRetiro: cells[7].innerText,
+                diagnostico: cells[8].innerText,
+                presupuesto: cells[9].innerText,
+                comentarios: cells[10].innerText,
+                telefono: cells[11].innerText,
+                comunicacionCliente: cells[12].innerText,
+                comunicacionVendedores: cells[13].innerText,
+                cadete: cells[14].innerText,
+                tecnico: cells[15].innerText,
+                vendedor: cells[16].innerText,
+                ubicacion: cells[17].innerText,
+                demora: cells[18].innerText,
+                comentariosInternos: cells[19].innerText,
+                estado: cells[20].innerText
             };
-        }
 
-        // Función para borrar equipos
-        function borrarEquipo(button) {
-            const row = button.parentNode.parentNode;
-            const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText;
-            localStorage.removeItem(`equipo_${codigoIdentificacion}`);
-            row.remove();
-            showModal("Equipo borrado exitosamente!");
-        }
+            // Guardar el equipo modificado en localStorage
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoData));
 
-        // Función para modificar mensajes
-        function modificarMensaje(button) {
-            const row = button.parentNode.parentNode;
-            const cells = row.querySelectorAll("td");
-            const codigo = cells[5].innerText; // Código es la columna 6
-            const mensajeData = JSON.parse(localStorage.getItem(`mensaje_${codigo}`));
+            // Cambiar el botón de nuevo a "Modificar"
+            button.innerText = "MODIFICAR";
+            button.onclick = modificarEquipo;
 
-            // Hacer todas las celdas editables
-            for (let i = 1; i < cells.length - 1; i++) {
-                cells[i].setAttribute("contenteditable", "true");
-            }
-
-            button.innerText = "GUARDAR";
-            button.onclick = function() {
-                for (let i = 1; i < cells.length - 1; i++) {
-                    cells[i].setAttribute("contenteditable", "false");
-                }
-
-                // Actualizar datos en localStorage
-                mensajeData.fecha = cells[1].innerText;
-                mensajeData.asunto = cells[2].innerText;
-                mensajeData.emisor = cells[3].innerText;
-                mensajeData.mensaje = cells[4].innerText;
-
-                localStorage.setItem(`mensaje_${codigo}`, JSON.stringify(mensajeData));
-
-                button.innerText = "MODIFICAR";
-                button.onclick = modificarMensaje;
-
-                showModal("Mensaje modificado exitosamente!");
-            };
-        }
-
-        // Función para borrar mensajes
-        function borrarMensaje(button) {
-            const row = button.parentNode.parentNode;
-            const codigoMensaje = row.querySelector("td:nth-child(6)").innerText;
-            localStorage.removeItem(`mensaje_${codigoMensaje}`);
-            row.remove();
-            showModal("Mensaje borrado exitosamente!");
-        }
-
-        // Cargar datos al iniciar la página
-        window.onload = function() {
-            loadMessages();
-            loadEquipos();
+            // Mostrar un modal confirmando la modificación
+            showModal("Equipo modificado exitosamente!");
         };
-    </script>
+    }
+
+    // Función para borrar equipo y eliminar de localStorage
+    function borrarEquipo(button) {
+        const row = button.parentNode.parentNode;
+        const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText;  // Código del equipo
+        localStorage.removeItem(`equipo_${codigoIdentificacion}`);  // Eliminar del localStorage
+        row.remove();  // Eliminar la fila de la tabla visualmente
+        showModal("Equipo borrado exitosamente!");  // Mostrar confirmación
+    }
+
+    // Función para modificar mensaje y persistir cambios en localStorage
+    function modificarMensaje(button) {
+        const row = button.parentNode.parentNode;
+        const cells = row.querySelectorAll("td");
+
+        // Habilitar edición de las celdas
+        for (let i = 1; i < cells.length - 1; i++) {
+            cells[i].setAttribute("contenteditable", "true");
+        }
+
+        // Cambiar el botón a "Guardar"
+        button.innerText = "GUARDAR";
+        button.onclick = function () {
+            // Deshabilitar edición de las celdas
+            for (let i = 1; i < cells.length - 1; i++) {
+                cells[i].setAttribute("contenteditable", "false");
+            }
+
+            // Actualizar los datos del mensaje en localStorage
+            const codigo = cells[5].innerText;  // Código de identificación
+            const mensajeData = {
+                fecha: cells[1].innerText,
+                asunto: cells[2].innerText,
+                emisor: cells[3].innerText,
+                mensaje: cells[4].innerText,
+                codigoIdentificacion: cells[5].innerText
+            };
+
+            // Guardar el mensaje modificado en localStorage
+            localStorage.setItem(`mensaje_${codigo}`, JSON.stringify(mensajeData));
+
+            // Cambiar el botón de nuevo a "Modificar"
+            button.innerText = "MODIFICAR";
+            button.onclick = modificarMensaje;
+
+            showModal("Mensaje modificado exitosamente!");
+        };
+    }
+
+    // Función para borrar mensaje y eliminar de localStorage
+    function borrarMensaje(button) {
+        const row = button.parentNode.parentNode;
+        const codigoIdentificacion = row.querySelector("td:nth-child(6)").innerText;  // Código del mensaje
+        localStorage.removeItem(`mensaje_${codigoIdentificacion}`);  // Eliminar del localStorage
+        row.remove();  // Eliminar la fila de la tabla visualmente
+        showModal("Mensaje borrado exitosamente!");  // Mostrar confirmación
+    }
+
+    // Cargar datos de localStorage al iniciar la página
+    window.onload = function () {
+        loadMessages();  // Cargar mensajes guardados
+        loadEquipos();  // Cargar equipos guardados
+    };
+
+</script>
+
 </body>
 </html>
