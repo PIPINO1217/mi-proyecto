@@ -1,162 +1,269 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Técnico - Gestión de Equipos</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Gestión de Equipos</title>
     <style>
-        /* Estilo para las tablas */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
         th, td {
-            padding: 12px;
+            border: 1px solid black;
+            padding: 8px;
             text-align: left;
-            border: 1px solid #ddd;
         }
         th {
-            background-color: #ff00f3;
-            color: white;
-        }
-        tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        .inbox {
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
+        td[contenteditable="true"] {
+            background-color: #e8f4ff;
         }
-        .button {
-            background-color: #ff00f3;
-            color: white;
+        .btn {
+            padding: 5px 10px;
+            margin: 5px;
             border: none;
-            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
             cursor: pointer;
-            border-radius: 5px;
         }
-        .button:hover {
-            background-color: #e600b8;
+        .btn-danger {
+            background-color: #f44336;
         }
-        .hidden {
-            display: none;
+        .btn:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>ENCARGADO</h1>
-        <nav>
-            <ul>
-                <li><a class="button" href="index.html">INICIO</a></li>
-                <li><a class="button" href="cliente.html">CLIENTE</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <div id="main-section">
-            <h2>CARGAR EQUIPO</h2>
-            <form id="registro-equipo" onsubmit="return registerEquipment()">
-                <!-- Campos del formulario -->
-                <!-- Código omitido para ahorrar espacio -->
-                <button type="submit" class="button">Registrar Equipo</button>
-            </form>
 
-            <h2>EQUIPOS</h2>
-            <table id="base-datos">
-                <thead>
-                    <tr>
-                        <th>CHECK</th>
-                        <th>NOMBRE</th>
-                        <th>MARCA</th>
-                        <th>MODELO</th>
-                        <th>CODIGO</th>
-                        <th>INGRESO</th>
-                        <th>RETIRO</th>
-                        <th>DIAGNOSTICO</th>
-                        <th>PRESUPUESTO</th>
-                        <th>COMENTARIOS</th>
-                        <th>TELEFONO</th>
-                        <th>COMUNICACION CLIENTE</th>
-                        <th>COMUNICACION VENDEDORES</th>
-                        <th>CADETE</th>
-                        <th>TÉCNICO</th>
-                        <th>VENDEDOR</th>
-                        <th>UBICACIÓN</th>
-                        <th>DEMORA</th>
-                        <th>COMENTARIOS INTERNOS</th>
-                        <th>ESTADO</th>
-                        <th>ACCIONES</th>
-                    </tr>
-                </thead>
-                <tbody id="datos-equipos"></tbody>
-            </table>
-        </div>
-    </main>
-    <footer>
-        <p>&copy; 2024 Gestión de Equipos</p>
-    </footer>
+<h2>Bandeja de entrada</h2>
+<table id="bandejaEntrada">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Asunto</th>
+            <th>Emisor</th>
+            <th>Mensaje</th>
+            <th>Código Identificación</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Filas dinámicas de mensajes -->
+    </tbody>
+</table>
 
-    <script>
-        // Otras funciones omitidas para ahorrar espacio
+<h2>Equipos</h2>
+<table id="tablaEquipos">
+    <thead>
+        <tr>
+            <th>Seleccionar</th>
+            <th>Cliente</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Código</th>
+            <th>Test</th>
+            <th>Fecha de Ingreso</th>
+            <th>Fecha de Retiro</th>
+            <th>Diagnóstico</th>
+            <th>Presupuesto</th>
+            <th>Comentarios</th>
+            <th>Teléfono</th>
+            <th>Comunic. Cliente</th>
+            <th>Comunic. Vendedores</th>
+            <th>Cadete</th>
+            <th>Técnico</th>
+            <th>Vendedor</th>
+            <th>Ubicación</th>
+            <th>Demora</th>
+            <th>Comentarios Internos</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Filas dinámicas de equipos -->
+    </tbody>
+</table>
 
-        function modificarEquipo(button) {
-            const row = button.parentNode.parentNode;
-            const cells = row.querySelectorAll("td");
-            const codigoIdentificacion = cells[4].innerText; // Código de identificación en la columna 5
+<script>
+    function modificarEquipo(button) {
+        const row = button.parentNode.parentNode;
+        const cells = row.querySelectorAll("td");
 
-            if (button.innerText === "MODIFICAR") {
-                // Habilitar la edición
-                for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
-                    cells[i].setAttribute("contenteditable", "true");
-                }
-                button.innerText = "GUARDAR";
-            } else {
-                // Guardar los cambios
-                for (let i = 1; i < cells.length - 1; i++) {
-                    cells[i].setAttribute("contenteditable", "false");
-                }
+        for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
+            cells[i].setAttribute("contenteditable", "true");
+        }
 
-                // Actualizar los datos en localStorage
-                const equipoActualizado = {
-                    nombreCliente: cells[1].innerText,
-                    marca: cells[2].innerText,
-                    modelo: cells[3].innerText,
-                    codigo: cells[4].innerText,
-                    test: cells[5].innerText,
-                    fechaIngreso: cells[6].innerText,
-                    fechaRetiro: cells[7].innerText,
-                    diagnostico: cells[8].innerText,
-                    presupuesto: cells[9].innerText,
-                    comentarios: cells[10].innerText,
-                    telefono: cells[11].innerText,
-                    comunicacionCliente: cells[12].innerText,
-                    comunicacionVendedores: cells[13].innerText,
-                    cadete: cells[14].innerText,
-                    tecnico: cells[15].innerText,
-                    vendedor: cells[16].innerText,
-                    ubicacion: cells[17].innerText,
-                    demora: cells[18].innerText,
-                    comentariosInternos: cells[19].innerText,
-                    estado: cells[20].innerText
-                };
+        button.innerText = "GUARDAR";
+        button.onclick = function() {
+            for (let i = 1; i < cells.length - 1; i++) {
+                cells[i].setAttribute("contenteditable", "false");
+            }
 
-                localStorage.setItem(`equipo_${codigoIdentificacion}`, JSON.stringify(equipoActualizado));
+            const codigo = cells[4].innerText; // Obtener el código del equipo
+            const equipoActualizado = {
+                nombreCliente: cells[1].innerText,
+                marca: cells[2].innerText,
+                modelo: cells[3].innerText,
+                codigo: cells[4].innerText,
+                test: cells[5].innerText,
+                fechaIngreso: cells[6].innerText,
+                fechaRetiro: cells[7].innerText,
+                diagnostico: cells[8].innerText,
+                presupuesto: cells[9].innerText,
+                comentarios: cells[10].innerText,
+                telefono: cells[11].innerText,
+                comunicacionCliente: cells[12].innerText,
+                comunicacionVendedores: cells[13].innerText,
+                cadete: cells[14].innerText,
+                tecnico: cells[15].innerText,
+                vendedor: cells[16].innerText,
+                ubicacion: cells[17].innerText,
+                demora: cells[18].innerText,
+                comentariosInternos: cells[19].innerText,
+                estado: cells[20].innerText
+            };
 
-                button.innerText = "MODIFICAR";
+            // Guardar los cambios en el localStorage
+            localStorage.setItem(`equipo_${codigo}`, JSON.stringify(equipoActualizado));
+
+            button.innerText = "MODIFICAR";
+            button.onclick = modificarEquipo;
+        };
+    }
+
+    function borrarEquipo(button) {
+        const row = button.parentNode.parentNode;
+        const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText;
+
+        // Eliminar del localStorage
+        localStorage.removeItem(`equipo_${codigoIdentificacion}`);
+
+        // Remover la fila de la tabla
+        row.remove();
+
+        showModal("Equipo borrado exitosamente!");
+    }
+
+    function modificarMensaje(button) {
+        const row = button.parentNode.parentNode;
+        const cells = row.querySelectorAll("td");
+
+        for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
+            cells[i].setAttribute("contenteditable", "true");
+        }
+
+        button.innerText = "GUARDAR";
+        button.onclick = function() {
+            for (let i = 1; i < cells.length - 1; i++) {
+                cells[i].setAttribute("contenteditable", "false");
+            }
+
+            const codigo = cells[5].innerText; // Obtener el código del mensaje
+            const mensajeActualizado = {
+                fecha: cells[1].innerText,
+                asunto: cells[2].innerText,
+                emisor: cells[3].innerText,
+                mensaje: cells[4].innerText,
+                codigoIdentificacion: cells[5].innerText
+            };
+
+            // Guardar los cambios en el localStorage
+            localStorage.setItem(`mensaje_${codigo}`, JSON.stringify(mensajeActualizado));
+
+            button.innerText = "MODIFICAR";
+            button.onclick = modificarMensaje;
+        };
+    }
+
+    function borrarMensaje(button) {
+        const row = button.parentNode.parentNode;
+        const codigoIdentificacion = row.querySelector("td:nth-child(6)").innerText;
+
+        // Eliminar del localStorage
+        localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
+
+        // Remover la fila de la tabla
+        row.remove();
+
+        showModal("Mensaje borrado exitosamente!");
+    }
+
+    function showModal(message) {
+        alert(message); // Simple alert como placeholder para un modal real
+    }
+
+    // Ejemplo para cargar datos de localStorage al iniciar
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarDatosDeLocalStorage();
+    });
+
+    function cargarDatosDeLocalStorage() {
+        // Cargar mensajes
+        const bandejaEntrada = document.querySelector('#bandejaEntrada tbody');
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith('mensaje_')) {
+                const mensaje = JSON.parse(localStorage.getItem(key));
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${mensaje.fecha}</td>
+                    <td>${mensaje.asunto}</td>
+                    <td>${mensaje.emisor}</td>
+                    <td>${mensaje.mensaje}</td>
+                    <td>${mensaje.codigoIdentificacion}</td>
+                    <td>
+                        <button class="btn" onclick="modificarMensaje(this)">MODIFICAR</button>
+                        <button class="btn btn-danger" onclick="borrarMensaje(this)">BORRAR</button>
+                    </td>
+                `;
+                bandejaEntrada.appendChild(row);
             }
         }
 
-        function borrarEquipo(button) {
-            const row = button.parentNode.parentNode;
-            const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText; // Columna 5 tiene el código
-            localStorage.removeItem(`equipo_${codigoIdentificacion}`); // Eliminar del localStorage
-            row.remove(); // Eliminar visualmente
-            showModal("Equipo borrado exitosamente!");
+        // Cargar equipos
+        const tablaEquipos = document.querySelector('#tablaEquipos tbody');
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith('equipo_')) {
+                const equipo = JSON.parse(localStorage.getItem(key));
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="checkbox"></td>
+                    <td>${equipo.nombreCliente}</td>
+                    <td>${equipo.marca}</td>
+                    <td>${equipo.modelo}</td>
+                    <td>${equipo.codigo}</td>
+                    <td>${equipo.test}</td>
+                    <td>${equipo.fechaIngreso}</td>
+                    <td>${equipo.fechaRetiro}</td>
+                    <td>${equipo.diagnostico}</td>
+                    <td>${equipo.presupuesto}</td>
+                    <td>${equipo.comentarios}</td>
+                    <td>${equipo.telefono}</td>
+                    <td>${equipo.comunicacionCliente}</td>
+                    <td>${equipo.comunicacionVendedores}</td>
+                    <td>${equipo.cadete}</td>
+                    <td>${equipo.tecnico}</td>
+                    <td>${equipo.vendedor}</td>
+                    <td>${equipo.ubicacion}</td>
+                    <td>${equipo.demora}</td>
+                    <td>${equipo.comentariosInternos}</td>
+                    <td>${equipo.estado}</td>
+                    <td>
+                        <button class="btn" onclick="modificarEquipo(this)">MODIFICAR</button>
+                        <button class="btn btn-danger" onclick="borrarEquipo(this)">BORRAR</button>
+                    </td>
+                `;
+                tablaEquipos.appendChild(row);
+            }
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
