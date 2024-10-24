@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Técnico - Gestión de Equipos</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilo para las tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #ff00f3;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .inbox {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .button {
+            background-color: #ff00f3;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #e600b8;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ENCARGADO</h1>
+        <nav>
+            <ul>
+                <li><a class="button" href="index.html">INICIO</a></li>
+                <li><a class="button" href="cliente.html">CLIENTE</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div id="main-section">
+            <h2>CARGAR EQUIPO</h2>
+            <form id="registro-equipo" onsubmit="return registerEquipment()">
+                <!-- Campos del formulario -->
+                <!-- Código omitido para ahorrar espacio -->
+                <button type="submit" class="button">Registrar Equipo</button>
+            </form>
+
+            <h2>EQUIPOS</h2>
+            <table id="base-datos">
+                <thead>
+                    <tr>
+                        <th>CHECK</th>
+                        <th>NOMBRE</th>
+                        <th>MARCA</th>
+                        <th>MODELO</th>
+                        <th>CODIGO</th>
+                        <th>INGRESO</th>
+                        <th>RETIRO</th>
+                        <th>DIAGNOSTICO</th>
+                        <th>PRESUPUESTO</th>
+                        <th>COMENTARIOS</th>
+                        <th>TELEFONO</th>
+                        <th>COMUNICACION CLIENTE</th>
+                        <th>COMUNICACION VENDEDORES</th>
+                        <th>CADETE</th>
+                        <th>TÉCNICO</th>
+                        <th>VENDEDOR</th>
+                        <th>UBICACIÓN</th>
+                        <th>DEMORA</th>
+                        <th>COMENTARIOS INTERNOS</th>
+                        <th>ESTADO</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody id="datos-equipos"></tbody>
+            </table>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Gestión de Equipos</p>
+    </footer>
+
+    <script>
+        // Otras funciones omitidas para ahorrar espacio
+
+        function modificarEquipo(button) {
+            const row = button.parentNode.parentNode;
+            const cells = row.querySelectorAll("td");
+            const codigoIdentificacion = cells[4].innerText; // Código de identificación en la columna 5
+
+            if (button.innerText === "MODIFICAR") {
+                // Habilitar la edición
+                for (let i = 1; i < cells.length - 1; i++) { // Ignorar checkbox y acciones
+                    cells[i].setAttribute("contenteditable", "true");
+                }
+                button.innerText = "GUARDAR";
+            } else {
+                // Guardar los cambios
+                for (let i = 1; i < cells.length - 1; i++) {
+                    cells[i].setAttribute("contenteditable", "false");
+                }
+
+                // Actualizar los datos en localStorage
+                const equipoActualizado = {
+                    nombreCliente: cells[1].innerText,
+                    marca: cells[2].innerText,
+                    modelo: cells[3].innerText,
+                    codigo: cells[4].innerText,
+                    test: cells[5].innerText,
+                    fechaIngreso: cells[6].innerText,
+                    fechaRetiro: cells[7].innerText,
+                    diagnostico: cells[8].innerText,
+                    presupuesto: cells[9].innerText,
+                    comentarios: cells[10].innerText,
+                    telefono: cells[11].innerText,
+                    comunicacionCliente: cells[12].innerText,
+                    comunicacionVendedores: cells[13].innerText,
+                    cadete: cells[14].innerText,
+                    tecnico: cells[15].innerText,
+                    vendedor: cells[16].innerText,
+                    ubicacion: cells[17].innerText,
+                    demora: cells[18].innerText,
+                    comentariosInternos: cells[19].innerText,
+                    estado: cells[20].innerText
+                };
+
+                localStorage.setItem(`equipo_${codigoIdentificacion}`, JSON.stringify(equipoActualizado));
+
+                button.innerText = "MODIFICAR";
+            }
+        }
+
+        function borrarEquipo(button) {
+            const row = button.parentNode.parentNode;
+            const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText; // Columna 5 tiene el código
+            localStorage.removeItem(`equipo_${codigoIdentificacion}`); // Eliminar del localStorage
+            row.remove(); // Eliminar visualmente
+            showModal("Equipo borrado exitosamente!");
+        }
+    </script>
+</body>
+</html>
