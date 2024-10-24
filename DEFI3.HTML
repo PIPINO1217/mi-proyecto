@@ -421,13 +421,18 @@
     }
 
     // Función para borrar equipo y eliminar de localStorage
-    function borrarEquipo(button) {
-        const row = button.parentNode.parentNode;
-        const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText;  // Código del equipo
-        localStorage.removeItem(`equipo_${codigoIdentificacion}`);  // Eliminar del localStorage
-        row.remove();  // Eliminar la fila de la tabla visualmente
-        showModal("Equipo borrado exitosamente!");  // Mostrar confirmación
-    }
+function borrarEquipo(button) {
+    const row = button.parentNode.parentNode;
+    const codigoIdentificacion = row.querySelector("td:nth-child(5)").innerText;
+    // Eliminar del localStorage
+    localStorage.removeItem(`equipo_${codigoIdentificacion}`);
+    // Eliminar la fila de la tabla
+    row.remove();
+    showModal("Equipo borrado exitosamente!");
+    // Recargar la tabla de equipos para reflejar cambios
+    loadEquipos(); 
+}
+
 
     // Función para modificar mensaje y persistir cambios en localStorage
     function modificarMensaje(button) {
@@ -469,13 +474,17 @@
     }
 
     // Función para borrar mensaje y eliminar de localStorage
-    function borrarMensaje(button) {
-        const row = button.parentNode.parentNode;
-        const codigoIdentificacion = row.querySelector("td:nth-child(6)").innerText;  // Código del mensaje
-        localStorage.removeItem(`mensaje_${codigoIdentificacion}`);  // Eliminar del localStorage
-        row.remove();  // Eliminar la fila de la tabla visualmente
-        showModal("Mensaje borrado exitosamente!");  // Mostrar confirmación
-    }
+function borrarMensaje(button) {
+    const row = button.parentNode.parentNode;
+    const codigoIdentificacion = row.querySelector("td:nth-child(6)").innerText;
+    // Eliminar del localStorage
+    localStorage.removeItem(`mensaje_${codigoIdentificacion}`);
+    // Eliminar la fila de la tabla
+    row.remove();
+    showModal("Mensaje borrado exitosamente!");
+    // Recargar los mensajes para reflejar cambios
+    loadMessages(); 
+}
 
     // Cargar datos de localStorage al iniciar la página
     window.onload = function () {
