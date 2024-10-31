@@ -3,36 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cliente - Gestión de Equipos</title>
+    <title>Cliente - Consulta de Estado y Contacto</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Cliente</h1>
+        <h1>Consulta de Estado y Contacto</h1>
         <nav>
             <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="tecnico.html">Técnico</a></li>
+                <li><a class="button" href="index.html">Inicio</a></li>
+                <li><a class="button" href="tecnico.html">Técnico</a></li>
             </ul>
         </nav>
     </header>
+
     <main>
-        <h2>Estado de Equipos</h2>
-        <!-- Sección para ver el estado del equipo -->
-        
-        <h2>Pedir Contratación</h2>
-        <form>
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" required>
-            <button type="submit">Solicitar Técnico</button>
+        <!-- NUEVA: Sección de consulta de estado -->
+        <h2>Consultar Estado del Equipo</h2>
+        <form id="consulta-equipo" onsubmit="return consultarEquipo()">
+            <label for="codigo-consulta">Código de Identificación:</label>
+            <input type="text" id="codigo-consulta" placeholder="Ingresa tu código" required>
+            <button type="submit">Consultar</button>
         </form>
 
+        <!-- Resultados de la consulta -->
+        <div id="resultado-consulta" style="display: none;">
+            <h3>Información del Equipo</h3>
+            <p><strong>Nombre y Apellido:</strong> <span id="nombre-cliente"></span></p>
+            <p><strong>Modelo:</strong> <span id="modelo"></span></p>
+            <p><strong>Marca:</strong> <span id="marca"></span></p>
+            <p><strong>Código de Identificación:</strong> <span id="codigo-equipo"></span></p>
+            <p><strong>Fecha de Ingreso:</strong> <span id="fecha-ingreso"></span></p>
+            <p><strong>Presupuesto:</strong> <span id="presupuesto"></span></p>
+            <p><strong>Estado:</strong> <span id="estado"></span></p>
+        </div>
+
+        <!-- Formulario de contacto -->
         <h2>Contacto</h2>
-        <form>
-            <label for="mensaje">Mensaje:</label>
-            <textarea id="mensaje" required></textarea>
+        <form id="form-contacto" onsubmit="return enviarMensaje()">
+            <label for="nombre-contacto">Nombre:</label>
+            <input type="text" id="nombre-contacto" placeholder="Tu nombre" required>
+
+            <label for="email-contacto">Email:</label>
+            <input type="email" id="email-contacto" placeholder="Tu email" required>
+
+            <label for="mensaje-contacto">Mensaje:</label>
+            <textarea id="mensaje-contacto" placeholder="Escribe tu mensaje aquí" required></textarea>
+
             <button type="submit">Enviar</button>
         </form>
     </main>
+
+    <footer>
+        <p>&copy; 2024 Consulta de Estado y Contacto</p>
+    </footer>
+
+    <script>
+        // Función para consultar estado del equipo
+        function consultarEquipo() {
+            const codigoConsulta = document.getElementById("codigo-consulta").value;
+
+            // Simulamos la consulta a localStorage (cambiar por backend luego)
+            const equipo = JSON.parse(localStorage.getItem(`equipo_${codigoConsulta}`));
+
+            if (equipo) {
+                document.getElementById("nombre-cliente").innerText = equipo.nombreCliente;
+                document.getElementById("modelo").innerText = equipo.modelo;
+                document.getElementById("marca").innerText = equipo.marca;
+                document.getElementById("codigo-equipo").innerText = equipo.codigo;
+                document.getElementById("fecha-ingreso").innerText = equipo.fechaIngreso;
+                document.getElementById("presupuesto").innerText = equipo.presupuesto;
+                document.getElementById("estado").innerText = equipo.estado;
+
+                document.getElementById("resultado-consulta").style.display = 'block';
+            } else {
+                alert("Código no encontrado. Verifica e intenta nuevamente.");
+                document.getElementById("resultado-consulta").style.display = 'none';
+            }
+
+            return false; // Evita el envío del formulario
+        }
+
+        // Función para enviar mensaje de contacto
+        function enviarMensaje() {
+            const nombre = document.getElementById("nombre-contacto").value;
+            const email = document.getElementById("email-contacto").value;
+            const mensaje = document.getElementById("mensaje-contacto").value;
+
+            if (nombre && email && mensaje) {
+                alert(`Gracias ${nombre}, hemos recibido tu mensaje. Nos pondremos en contacto contigo pronto.`);
+                document.getElementById("form-contacto").reset(); // Resetea el formulario
+            } else {
+                alert('Por favor, completa todos los campos.');
+            }
+
+            return false; // Evita el envío del formulario
+        }
+    </script>
 </body>
 </html>
+
