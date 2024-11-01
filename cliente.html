@@ -134,7 +134,7 @@
             };
 
             try {
-  localStorage.setItem(`mensaje_${mensajeCount++}`, JSON.stringify(mensajeData));
+  localStorage.setItem(`mensaje_${codigoIdentificacion}`, JSON.stringify(mensajeData));
   console.log("Datos guardados exitosamente en localStorage.");
 } catch (error) {
   console.error("Error al guardar en localStorage:", error);
