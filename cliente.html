@@ -133,7 +133,13 @@
                 codigoIdentificacion
             };
 
-            localStorage.setItem(`mensaje_${mensajeCount++}`, JSON.stringify(mensajeData));
+            try {
+  localStorage.setItem(`mensaje_${mensajeCount++}`, JSON.stringify(mensajeData));
+  console.log("Datos guardados exitosamente en localStorage.");
+} catch (error) {
+  console.error("Error al guardar en localStorage:", error);
+}
+            
             alert("Mensaje enviado exitosamente.");
 
             // Limpiar el formulario
